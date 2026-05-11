@@ -5,13 +5,29 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>El_Nabaash.API</RootNamespace>
+        <UserSecretsId>dd9eed94-f0bd-49d7-b892-0630db29b861</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
+      <Folder Include="Models\Request\" />
+      <Folder Include="Models\Response\" />
       <Folder Include="wwwroot\" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7" />
+      <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="10.0.7" />
+      <PackageReference Include="Microsoft.Build.Tasks.Core" Version="18.4.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.7" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.7">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+      </PackageReference>
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="10.0.7">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
       <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7" />
     </ItemGroup>
 
