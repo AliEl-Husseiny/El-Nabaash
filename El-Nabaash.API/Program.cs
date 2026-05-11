@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace El_Nabaash.API;
 
 public class Program
@@ -6,6 +8,13 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        // get connection string
+        var connectionString = DataUtility.GetConnectionString(builder.Configuration);
+        
+        // Connect to database
+        builder.Services.AddDbContext<AppDbContext>(options => 
+            options.UseNpgsql(connectionString));
+        
         // Add services to the container.
         builder.Services.AddAuthorization();
         
