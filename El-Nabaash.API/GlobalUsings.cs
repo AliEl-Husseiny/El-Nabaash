@@ -1,0 +1,1 @@
+global using El_Nabaash.API.Extensions;
