@@ -1,0 +1,6 @@
+@El_Nabaash.API_HostAddress = http://localhost:5192
+
+GET {{El_Nabaash.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
