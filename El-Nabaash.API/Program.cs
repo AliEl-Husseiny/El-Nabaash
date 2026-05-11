@@ -1,3 +1,6 @@
+using El_Nabaash.API.Endpoints.Home;
+using El_Nabaash.API.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace El_Nabaash.API;
@@ -22,6 +25,23 @@ public class Program
         builder.Services.AddOpenApiSwagger();
         
 
+        //add identity endpoints 
+        builder.Services.AddIdentityApiEndpoints<ApplicationUser>(opt =>
+            {
+                opt.SignIn.RequireConfirmedAccount = false;
+                opt.User.RequireUniqueEmail = true;
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<AppDbContext>();
+        
+        //Admin Policy 
+        builder.Services.AddAuthorizationBuilder()
+            .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
+        
+        
+        //enable validation for minimal APIs
+        builder.Services.AddValidation();
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -32,19 +52,16 @@ public class Program
         }
 
         app.UseHttpsRedirection();
-        app.UseAuthorization();
         app.UseStaticFiles();
+        app.UseAuthentication();
+        app.UseAuthorization();
+        
+        var authRouteGroup = app.MapGroup("/api/auth")
+            .WithTags("Admin");
 
-        app.MapGet("/welcome", () =>
-        {
-            var response = new
-            {
-                Message = "Welcome to El-Nabaash API!",
-                Version = "1.0.0",
-                TimeOnly = DateTime.Now.ToShortTimeString()
-            };
-            return response;
-        }).WithName("Welcome");
+        authRouteGroup.MapIdentityApi<ApplicationUser>();
+        
+        app.MapHomeEndpoints();
 
         app.Run();
     }

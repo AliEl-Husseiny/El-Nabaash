@@ -10,7 +10,6 @@
 
     <ItemGroup>
       <Folder Include="Models\Request\" />
-      <Folder Include="Models\Response\" />
       <Folder Include="wwwroot\" />
     </ItemGroup>
 
