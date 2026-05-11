@@ -33,3 +33,5 @@
 /home/ali/Software Engineering/Server-Side Development/ASP.NET/El-Nabaash/El-Nabaash.API/obj/Debug/net10.0/El-Nabaash.API.pdb
 /home/ali/Software Engineering/Server-Side Development/ASP.NET/El-Nabaash/El-Nabaash.API/obj/Debug/net10.0/El-Nabaash.API.genruntimeconfig.cache
 /home/ali/Software Engineering/Server-Side Development/ASP.NET/El-Nabaash/El-Nabaash.API/obj/Debug/net10.0/ref/El-Nabaash.API.dll
+/home/ali/Software Engineering/Server-Side Development/ASP.NET/El-Nabaash/El-Nabaash.API/obj/Debug/net10.0/El-Nabaash.API.sourcelink.json
+/home/ali/Software Engineering/Server-Side Development/ASP.NET/El-Nabaash/El-Nabaash.API/bin/Debug/net10.0/El-Nabaash.API.staticwebassets.runtime.json
