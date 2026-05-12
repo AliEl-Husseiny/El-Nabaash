@@ -56,7 +56,7 @@ public static class CustomIdentityEndpoints
         // check if the user email is already exists
         if (await userManager.FindByEmailAsync(registerUserRequestDto.Email) is not null)
         {
-            return Results.BadRequest($"User with this email {registerUserRequestDto.Email} already exist");
+            return Results.BadRequest($"User with this email {registerUserRequestDto.Email} already exists");
         }
 
         var user = new ApplicationUser
