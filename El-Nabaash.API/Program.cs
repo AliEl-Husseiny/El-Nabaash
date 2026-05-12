@@ -1,4 +1,6 @@
 
+using El_Nabaash.API.Endpoints.CustomIdentityEndpoints;
+
 namespace El_Nabaash.API;
 
 public static class Program
@@ -63,6 +65,7 @@ public static class Program
         authRouteGroup.MapIdentityApi<ApplicationUser>();
         
         app.MapHomeEndpoints();
+        app.MapCustomIdentityEndpoints();
         
         app.Run();
     }
