@@ -2,3 +2,11 @@ global using El_Nabaash.API.Extensions;
 global using Microsoft.OpenApi;
 global using El_Nabaash.API.Data;
 global using El_Nabaash.API.Models.Response;
+global using El_Nabaash.API.Endpoints.Home;
+global using El_Nabaash.API.Middlewares;
+global using El_Nabaash.API.Models;
+global using El_Nabaash.API.Services;
+global using Microsoft.AspNetCore.Identity.UI.Services;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.EntityFrameworkCore;
+

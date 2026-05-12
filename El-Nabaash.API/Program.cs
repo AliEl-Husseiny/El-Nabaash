@@ -1,8 +1,3 @@
-using El_Nabaash.API.Endpoints.Home;
-using El_Nabaash.API.Middlewares;
-using El_Nabaash.API.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace El_Nabaash.API;
 
@@ -42,6 +37,10 @@ public static class Program
         
         //enable validation for minimal APIs
         builder.Services.AddValidation();
+        
+        
+        //add email sender services 
+        builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
         
         var app = builder.Build();
 
