@@ -1,7 +1,3 @@
-using El_Nabaash.API.Models;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
-
 namespace El_Nabaash.API.Services;
 
 public class ConsoleEmailService : IEmailSender

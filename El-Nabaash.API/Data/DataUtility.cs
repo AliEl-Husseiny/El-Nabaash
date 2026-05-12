@@ -7,5 +7,4 @@ public class DataUtility
         var connectionString = configuration.GetConnectionString("DbConnection") ?? "";
         return connectionString;
     }
-
 }

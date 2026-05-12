@@ -8,7 +8,7 @@ public static class HomeEndpoints
     {
         var homeGroup = routeBuilder.MapGroup("api/Home")
             .WithTags("Home");
-        
+
         // api/Home/welcome
         homeGroup.MapGet("/welcome", GetWelcomeMessage)
             .WithName("GetWelcomeMessage")
@@ -16,12 +16,12 @@ public static class HomeEndpoints
             .WithDescription("Displays a welcome message");
         return routeBuilder;
     }
-    
+
     // Handlers 
 
     private static async Task<Ok<WelcomeResponse>> GetWelcomeMessage(CancellationToken ct)
     {
-        var welcomeMessage = new WelcomeResponse()
+        var welcomeMessage = new WelcomeResponse
         {
             Message = "Welcome to El-Nabaash API!",
             Version = "1.0.0",

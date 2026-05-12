@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using El_Nabaash.API.Models;
 
 namespace El_Nabaash.API.Data;
 

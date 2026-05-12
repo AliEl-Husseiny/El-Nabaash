@@ -10,4 +10,3 @@ global using Microsoft.AspNetCore.Identity.UI.Services;
 global using Microsoft.AspNetCore.Identity;
 global using Microsoft.EntityFrameworkCore;
 global using El_Nabaash.API.DTOs.Identity;
-
