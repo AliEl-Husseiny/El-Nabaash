@@ -1,4 +1,3 @@
-
 namespace El_Nabaash.API.Middlewares;
 
 // using the primary instructor
@@ -24,7 +23,7 @@ public class BlockIdentityEndpoints(RequestDelegate next)
             await context.Response.WriteAsync("Not Found");
             return; // Short-circuit the pipeline
         }
-        
+
         await next(context);
 
         // After logic

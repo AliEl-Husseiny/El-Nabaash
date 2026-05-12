@@ -1,4 +1,3 @@
-
 using El_Nabaash.API.Endpoints.CustomIdentityEndpoints;
 
 namespace El_Nabaash.API;
@@ -11,17 +10,17 @@ public static class Program
 
         // get connection string
         var connectionString = DataUtility.GetConnectionString(builder.Configuration);
-        
+
         // Connect to database
-        builder.Services.AddDbContext<AppDbContext>(options => 
+        builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseNpgsql(connectionString));
-        
+
         // Add services to the container.
         builder.Services.AddAuthorization();
-        
+
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApiSwagger();
-        
+
 
         //add identity endpoints 
         builder.Services.AddIdentityApiEndpoints<ApplicationUser>(opt =>
@@ -31,19 +30,19 @@ public static class Program
             })
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<AppDbContext>();
-        
+
         //Admin Policy 
         builder.Services.AddAuthorizationBuilder()
             .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-        
-        
+
+
         //enable validation for minimal APIs
         builder.Services.AddValidation();
-        
-        
+
+
         //add email sender services 
         builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
-        
+
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -58,15 +57,15 @@ public static class Program
         app.UseAuthentication();
         app.UseAuthorization();
         app.UseBlockIdentityEndpoints();
-        
+
         var authRouteGroup = app.MapGroup("/api/auth")
             .WithTags("Admin");
 
         authRouteGroup.MapIdentityApi<ApplicationUser>();
-        
+
         app.MapHomeEndpoints();
         app.MapCustomIdentityEndpoints();
-        
+
         app.Run();
     }
 }
