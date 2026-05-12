@@ -1,11 +1,12 @@
 using El_Nabaash.API.Endpoints.Home;
+using El_Nabaash.API.Middlewares;
 using El_Nabaash.API.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace El_Nabaash.API;
 
-public class Program
+public static class Program
 {
     public static void Main(string[] args)
     {
@@ -55,6 +56,7 @@ public class Program
         app.UseStaticFiles();
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseBlockIdentityEndpoints();
         
         var authRouteGroup = app.MapGroup("/api/auth")
             .WithTags("Admin");
@@ -62,7 +64,7 @@ public class Program
         authRouteGroup.MapIdentityApi<ApplicationUser>();
         
         app.MapHomeEndpoints();
-
+        
         app.Run();
     }
 }
