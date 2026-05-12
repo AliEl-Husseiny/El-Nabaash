@@ -49,6 +49,28 @@ public static class OpenApiSwaggerExtensions
                         new List<string>()
                     }
                 });
+
+
+                string[] hiddenEndpoints =
+                [
+                    "api/auth/register",
+                    "api/auth/refresh",
+                    "api/auth/confirmemail",
+                    "api/auth/resendconfirmationemail",
+                    "api/auth/forgotpassword",
+                    "api/auth/resetpassword",
+                    "api/auth/manage",
+                    "api/auth/manage/info",
+                    "api/auth/manage/2fa"
+                ];
+                
+                opt.DocInclusionPredicate((docName, apiDesc) =>
+                {
+                    var path = apiDesc.RelativePath?.ToLower();
+                    return !(hiddenEndpoints.Contains(path,StringComparer.OrdinalIgnoreCase) | path is null);
+                    // Exclude these endpoints from the documentation
+                    // Include all other endpoints
+                });
             });
         }
 }

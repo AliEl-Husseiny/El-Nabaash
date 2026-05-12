@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace El_Nabaash.API;
 
-public class Program
+public static class Program
 {
     public static void Main(string[] args)
     {
@@ -62,7 +62,7 @@ public class Program
         authRouteGroup.MapIdentityApi<ApplicationUser>();
         
         app.MapHomeEndpoints();
-
+        
         app.Run();
     }
 }
