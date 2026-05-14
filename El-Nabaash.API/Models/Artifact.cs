@@ -15,4 +15,7 @@ public class Artifact
     public string? Type { get; set; }
     [Required] public int SiteId { get; set; }
     public Site? Site { get; set; }
+    
+    // navigation properties 
+    public List<ArtifcatMediaFile> MediaFiles { get; set; } = [];
 }
