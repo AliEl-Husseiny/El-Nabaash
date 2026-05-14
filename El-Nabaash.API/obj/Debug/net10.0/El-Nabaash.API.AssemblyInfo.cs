@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("El-Nabaash.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5296a814b320bc67251a9f6e81277ab9d70093b6")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bd71a909d0679af9ec3fda45e0c7962a914a7cfc")]
 [assembly: System.Reflection.AssemblyProductAttribute("El-Nabaash.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("El-Nabaash.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
