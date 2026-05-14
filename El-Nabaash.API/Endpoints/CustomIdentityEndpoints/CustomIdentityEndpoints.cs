@@ -65,7 +65,7 @@ public static class CustomIdentityEndpoints
             .WithName("ListUsers")
             .WithDescription("List all users in the system")
             .WithSummary("List all users")
-            .RequireAuthorization("AdminOnly")
+            .RequireAuthorization()
             .Produces<IEnumerable<UserProfileResponseDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized);
 
