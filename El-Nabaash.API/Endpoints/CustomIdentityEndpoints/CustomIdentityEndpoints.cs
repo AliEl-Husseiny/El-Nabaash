@@ -171,7 +171,7 @@ public static class CustomIdentityEndpoints
 
         // check if the user with the email is existed 
         var user = await userManager.FindByEmailAsync(forgetPasswordRequestDto.Email);
-        if (user is null) return Results.BadRequest($"User with Email: {forgetPasswordRequestDto.Email} not found");
+        if (user is null) return Results.BadRequest($"The Reset Password link has been sent to this email if it exist");
 
 
         // generate a reset password token 
