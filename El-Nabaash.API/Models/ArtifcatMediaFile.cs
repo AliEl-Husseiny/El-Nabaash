@@ -1,6 +1,6 @@
 namespace El_Nabaash.API.Models;
 
-public class ArtifcatMediaFile
+public class ArtifactMediaFile
 {
     public int Id { get; set; }
     public int ArtifactId { get; set; }
