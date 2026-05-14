@@ -1,4 +1,6 @@
+using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.WebUtilities;
 
@@ -40,6 +42,17 @@ public static class CustomIdentityEndpoints
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest);
 
+        
+        group.MapGet("manage/profile",GetProfileInfo)
+            .WithName("GetProfileInfo")
+            .WithDescription("Get Current user profile info")
+            .WithSummary("Get the current users profile")
+            .Produces(StatusCodes.Status200OK)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .RequireAuthorization();
+        
+        
+        
         // step 3 - implement route handlers
 
 
@@ -200,4 +213,25 @@ public static class CustomIdentityEndpoints
 
         return Results.Ok(new { Message = "Forget Password Endpoint" });
     }
+    
+    
+    
+    // Get profile Info 
+    private static async Task<IResult> GetProfileInfo(
+        ClaimsPrincipal principal,
+        UserManager<ApplicationUser> userManager
+    )
+    {
+        var user = await userManager.GetUserAsync(principal);
+        if (user is null) return Results.BadRequest("User not found");
+
+        return Results.Ok(new UserProfileResponseDto()
+        {
+            Id = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+        });
+    }
+
 }
