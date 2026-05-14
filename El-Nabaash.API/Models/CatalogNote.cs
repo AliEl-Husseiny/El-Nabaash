@@ -13,4 +13,12 @@ public class CatalogNote
 
     public string AuthorId { get; set; } = string.Empty; // FK to ApplicationUser
     public ApplicationUser Author { get; set; } = null!; // Navigation property to ApplicationUser
+
+    [Required]
+    public string Content { get; set; } = string.Empty; // The content of the note
+    [Required]
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // Timestamp for when the note was created
+
+    public ICollection<CatalogNote> Notes { get; set; } = [];
+
 }
