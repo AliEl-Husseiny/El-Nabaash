@@ -1,5 +1,8 @@
+using System.Text.Json.Serialization;
+
 namespace El_Nabaash.API.Enums;
 
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ArtifactType
 {
     Weapon = 1,
