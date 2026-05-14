@@ -61,6 +61,13 @@ public static class CustomIdentityEndpoints
 
         // step 3 - implement route handlers
 
+        group.MapGet("/manage/users", ListAllUsers)
+            .WithName("ListUsers")
+            .WithDescription("List all users in the system")
+            .WithSummary("List all users")
+            .RequireAuthorization("AdminOnly")
+            .Produces<IEnumerable<UserProfileResponseDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized);
 
         // step 4 - return the route 
         return routeBuilder;
@@ -91,7 +98,7 @@ public static class CustomIdentityEndpoints
             : Results.BadRequest(new { Message = "Failed to update profile", result.Errors });
     }
 
-
+   
     // Handlers
 
     private static async Task<IResult> RegisterUser(
@@ -262,5 +269,19 @@ public static class CustomIdentityEndpoints
             FirstName = user.FirstName,
             LastName = user.LastName,
         });
+    }
+    
+    private static async Task<IResult> ListAllUsers(UserManager<ApplicationUser> userManager)
+    {
+        var users = await userManager.Users.ToListAsync();
+        var userDtos = users.Select(user => new UserProfileResponseDto
+        {
+            Id = user.Id,
+            Email = user.Email,
+            FirstName = user.FirstName,
+            LastName = user.LastName
+        }).ToList();
+
+        return Results.Ok(userDtos);
     }
 }
