@@ -1,8 +1,8 @@
 using System.Security.Claims;
 using System.Text;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.WebUtilities;
+using static System.String;
 
 namespace El_Nabaash.API.Endpoints.CustomIdentityEndpoints;
 
@@ -42,22 +42,53 @@ public static class CustomIdentityEndpoints
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest);
 
-        
-        group.MapGet("manage/profile",GetProfileInfo)
+
+        group.MapGet("manage/profile", GetProfileInfo)
             .WithName("GetProfileInfo")
             .WithDescription("Get Current user profile info")
             .WithSummary("Get the current users profile")
             .Produces(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .RequireAuthorization();
-        
-        
-        
+
+
+        group.MapPut("/manage/profile", UpdateProfile)
+            .WithName("UpdateProfile")
+            .WithDescription("Updates the current user profile information")
+            .Produces(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status401Unauthorized);
+
         // step 3 - implement route handlers
 
 
         // step 4 - return the route 
         return routeBuilder;
+    }
+
+    private static async Task<IResult> UpdateProfile(
+        ClaimsPrincipal principal,
+        UserManager<ApplicationUser> userManager,
+        UpdateProfileRequestDto? updateProfileRequestDto
+    )
+    {
+        // validate inputs
+        if (updateProfileRequestDto is null || IsNullOrEmpty(updateProfileRequestDto.FirstName) ||
+            IsNullOrEmpty(updateProfileRequestDto.LastName))
+        {
+            return Results.BadRequest("First name and last name are required");
+        }
+
+        var user = await userManager.GetUserAsync(principal);
+        if (user is null) return Results.BadRequest("User not found");
+
+        user.FirstName = updateProfileRequestDto.FirstName;
+        user.LastName = updateProfileRequestDto.LastName;
+
+        var result = await userManager.UpdateAsync(user);
+        return result.Succeeded
+            ? Results.Ok(new { Message = "Profile updated successfully" })
+            : Results.BadRequest(new { Message = "Failed to update profile", result.Errors });
     }
 
 
@@ -86,7 +117,7 @@ public static class CustomIdentityEndpoints
         };
 
         // In real Co-Operations we generate the passwords 
-        var tempPassword = "TempPassword123!";
+        const string tempPassword = "TempPassword123!";
 
         var created = await userManager.CreateAsync(user, tempPassword);
 
@@ -140,9 +171,9 @@ public static class CustomIdentityEndpoints
         ResetPasswordRequest resetPasswordRequest,
         UserManager<ApplicationUser> userManager)
     {
-        if (string.IsNullOrEmpty(resetPasswordRequest.Email) ||
-            string.IsNullOrEmpty(resetPasswordRequest.NewPassword) ||
-            string.IsNullOrEmpty(resetPasswordRequest.ResetCode))
+        if (IsNullOrEmpty(resetPasswordRequest.Email) ||
+            IsNullOrEmpty(resetPasswordRequest.NewPassword) ||
+            IsNullOrEmpty(resetPasswordRequest.ResetCode))
         {
             return Results.BadRequest("All fields are required.");
         }
@@ -179,7 +210,7 @@ public static class CustomIdentityEndpoints
     )
     {
         // check if the email is null or empty 
-        if (string.IsNullOrEmpty(forgetPasswordRequestDto.Email))
+        if (IsNullOrEmpty(forgetPasswordRequestDto.Email))
             return Results.BadRequest("Email is required");
 
         // check if the user with the email is existed 
@@ -197,7 +228,7 @@ public static class CustomIdentityEndpoints
 
         // build the reset link 
         var resetLink = $"{baseUrl}/resetpassword.html?email={forgetPasswordRequestDto.Email}&resetCode={encodedToken}";
-        
+
         // send the email 
         await emailSender.SendEmailAsync(
             forgetPasswordRequestDto.Email,
@@ -213,9 +244,8 @@ public static class CustomIdentityEndpoints
 
         return Results.Ok(new { Message = "Forget Password Endpoint" });
     }
-    
-    
-    
+
+
     // Get profile Info 
     private static async Task<IResult> GetProfileInfo(
         ClaimsPrincipal principal,
@@ -233,5 +263,4 @@ public static class CustomIdentityEndpoints
             LastName = user.LastName,
         });
     }
-
 }
