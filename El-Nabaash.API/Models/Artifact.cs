@@ -1,6 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using El_Nabaash.API.Enums;
-
 namespace El_Nabaash.API.Models;
 
 public class Artifact
@@ -17,5 +15,8 @@ public class Artifact
     public Site? Site { get; set; }
     
     // navigation properties 
-    public List<ArtifcatMediaFile> MediaFiles { get; set; } = [];
+    public List<ArtifactMediaFile> MediaFiles { get; set; } = [];
+    
+    public List<CatalogRecord> CatalogRecords { get; set; } = [];
+    
 }
