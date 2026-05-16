@@ -1,6 +1,3 @@
-using El_Nabaash.API.DTOs.Site.Response;
-using El_Nabaash.API.Services.Abstraction;
-
 namespace El_Nabaash.API.Endpoints.Sites;
 
 public static class SiteEndpoints
@@ -15,7 +12,8 @@ public static class SiteEndpoints
             .AllowAnonymous()
             .WithSummary("Public Site Endpoints")
             .WithDescription("Endpoint that expose public site data")
-            .WithTags("Sites - Public");
+            .WithTags("Sites - Public")
+            .AddEndpointFilter<ExceptionHandlingFilter>();
         
         
         
@@ -26,7 +24,8 @@ public static class SiteEndpoints
             .WithDescription("Return all sites with their public data")
             // .Produces(StatusCodes.Status200OK, typeof(List<PublicSiteResponse>));
         // or 
-            .Produces<List<PublicSiteResponse>>(StatusCodes.Status200OK);
+            .Produces<List<PublicSiteResponse>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status500InternalServerError);
             
 
 

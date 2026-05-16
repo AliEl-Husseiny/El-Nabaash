@@ -1,4 +1,5 @@
 using El_Nabaash.API.Endpoints.CustomIdentityEndpoints;
+using El_Nabaash.API.Endpoints.Sites;
 using El_Nabaash.API.Services.Abstraction;
 
 namespace El_Nabaash.API;
@@ -75,7 +76,7 @@ public static class Program
         
         app.MapHomeEndpoints();
         app.MapCustomIdentityEndpoints();
-
+        app.MapSiteEndpoints();
         app.Run();
     }
 }
