@@ -86,6 +86,16 @@ public static class SiteEndpoints
     
     // Handlers Methods for private Sites 
 
+    private static async Task<Results<NoContent, NotFound<string>, ValidationProblem>> UpdateSite(
+        int id,
+        UpdateSiteRequest request,
+        ISiteService siteService,
+        CancellationToken ct)
+    {
+        var success = await siteService.UpdateSiteAsync(id, request, ct);
+        return success ? TypedResults.NoContent() : TypedResults.NotFound($"Site with Id {id} is not found");
+    }
+
     private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(
     CreateSiteRequest request,
     ISiteService siteService,
