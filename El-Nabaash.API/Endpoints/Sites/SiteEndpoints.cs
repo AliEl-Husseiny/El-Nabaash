@@ -79,6 +79,16 @@ public static class SiteEndpoints
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status500InternalServerError);
         
+        privateGroup.MapPut("/{id:int}", UpdateSite)
+            .WithName(nameof(UpdateSite))
+            .WithSummary("Update a Site")
+            .WithDescription("Update a site with the given data requires authentication")
+            .Accepts<UpdateSiteRequest>("application/json")
+            .ProducesValidationProblem()
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status500InternalServerError);
         
         return route;
     }

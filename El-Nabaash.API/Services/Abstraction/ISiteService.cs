@@ -12,4 +12,5 @@ public interface ISiteService
     Task<PrivateSiteResponse?> GetPrivateSiteByIdAsync(int Id, CancellationToken ct);
     Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct);
     Task<bool> UpdateSiteAsync(int Id, UpdateSiteRequest request, CancellationToken ct);
+    Task<bool> DeleteSiteAsync(int id, CancellationToken ct);
 }
