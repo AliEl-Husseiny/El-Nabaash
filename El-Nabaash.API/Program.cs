@@ -1,4 +1,5 @@
 using El_Nabaash.API.Endpoints.CustomIdentityEndpoints;
+using El_Nabaash.API.Services.Abstraction;
 
 namespace El_Nabaash.API;
 
@@ -43,6 +44,9 @@ public static class Program
         //add email sender services 
         builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
+        // add custom service 
+        builder.Services.AddScoped<ISiteService, SiteService>();
+      
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
