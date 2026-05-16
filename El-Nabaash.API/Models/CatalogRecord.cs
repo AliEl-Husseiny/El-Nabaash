@@ -16,4 +16,6 @@ public class CatalogRecord
     public string Status { get; set; } = CatalogStatus.Draft.ToString(); // default to Draft
     [Required]
     public DateTime DateSubmitted { get; set; } = DateTime.UtcNow;
+    public ICollection<CatalogNote> Notes { get; set; } = new List<CatalogNote>();
+
 }

@@ -460,7 +460,7 @@ namespace El_Nabaash.API.Data.Migrations
                         .HasForeignKey("CatalogNoteId");
 
                     b.HasOne("El_Nabaash.API.Models.CatalogRecord", "CatalogRecord")
-                        .WithMany()
+                        .WithMany("Notes")
                         .HasForeignKey("CatalogRecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -564,6 +564,11 @@ namespace El_Nabaash.API.Data.Migrations
                 });
 
             modelBuilder.Entity("El_Nabaash.API.Models.CatalogNote", b =>
+                {
+                    b.Navigation("Notes");
+                });
+
+            modelBuilder.Entity("El_Nabaash.API.Models.CatalogRecord", b =>
                 {
                     b.Navigation("Notes");
                 });

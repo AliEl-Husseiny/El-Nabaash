@@ -4,7 +4,7 @@ namespace El_Nabaash.API;
 
 public static class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +63,12 @@ public static class Program
 
         authRouteGroup.MapIdentityApi<ApplicationUser>();
 
+        
+        using (var scope = app.Services.CreateScope())
+        {
+            await DataSeed.ManageDataAsync(scope.ServiceProvider);
+        }
+        
         app.MapHomeEndpoints();
         app.MapCustomIdentityEndpoints();
 
