@@ -1,3 +1,6 @@
+using El_Nabaash.API.DTOs.Site.Request;
+using Microsoft.AspNetCore.Http.HttpResults;
+
 namespace El_Nabaash.API.Endpoints.Sites;
 
 public static class SiteEndpoints
@@ -71,7 +74,16 @@ public static class SiteEndpoints
 
     
     // Handlers Methods for private Sites 
-    
+
+    private static async Task<Results<Created<PrivateSiteResponse>, ValidationProblem>> CreateSite(
+    CreateSiteRequest request,
+    ISiteService siteService,
+    CancellationToken ct
+    )
+    {
+        
+    }
+
     private static async Task<IResult> GetPrivateSiteById(int Id, ISiteService siteService, CancellationToken ct)
     {
         var site = await siteService.GetPrivateSiteByIdAsync(Id, ct);
