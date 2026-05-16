@@ -1,8 +1,6 @@
 using El_Nabaash.API.DTOs.Site.Request;
-using El_Nabaash.API.DTOs.Site.Response;
-using El_Nabaash.API.Services.Abstraction;
 
-namespace El_Nabaash.API.Services;
+namespace El_Nabaash.API.Services.Implementation;
 
 public class SiteService(AppDbContext _dbContext) : ISiteService
 {
@@ -108,5 +106,23 @@ public class SiteService(AppDbContext _dbContext) : ISiteService
             PublicNarrative = site.PublicNarrative,
             PrivateNarrative = site.ElNabaashNarrative
         };
+    }
+
+    public async Task<bool> UpdateSiteAsync(int Id, UpdateSiteRequest request, CancellationToken ct)
+    {
+        var site = _dbContext.Sites.FindAsync(Id, ct).Result as Site;
+        if (site is null)
+            return false;
+       
+        site.Name = request.Name;
+        site.Location = request.Location;
+        site.Coordinates = request.Coordinates;
+        site.Latitude = request.Latitude;
+        site.Longitude = request.Longitude;
+        site.Description = request.Description;
+        site.PublicNarrative = request.PublicNarrative;
+        site.ElNabaashNarrative = request.ElNabaashNarrative;
+        return true;
+
     }
 }
