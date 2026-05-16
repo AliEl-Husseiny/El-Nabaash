@@ -1,3 +1,4 @@
+using El_Nabaash.API.DTOs.Site.Request;
 using El_Nabaash.API.DTOs.Site.Response;
 
 namespace El_Nabaash.API.Services.Abstraction;
@@ -9,4 +10,5 @@ public interface ISiteService
     Task<PublicSiteResponse?> GetPublicSiteByIdAsync(int Id, CancellationToken ct);
     Task<List<PrivateSiteResponse>> GetAllPrivateSitesAsync(CancellationToken ct);
     Task<PrivateSiteResponse?> GetPrivateSiteByIdAsync(int Id, CancellationToken ct);
+    Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct);
 }
