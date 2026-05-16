@@ -1,3 +1,4 @@
+using El_Nabaash.API.DTOs.Site.Request;
 using El_Nabaash.API.DTOs.Site.Response;
 using El_Nabaash.API.Services.Abstraction;
 
@@ -76,5 +77,36 @@ public class SiteService(AppDbContext _dbContext) : ISiteService
                 PrivateNarrative = s.ElNabaashNarrative
             })
             .FirstOrDefaultAsync(ct);
+    }
+
+    public async Task<PrivateSiteResponse> CreateSiteAsync(CreateSiteRequest request, CancellationToken ct)
+    {
+        var site = new Site
+        {
+            Name = request.Name,
+            Location = request.Location,
+            Coordinates = request.Coordinates,
+            Latitude = request.Latitude,
+            Longitude = request.Longitude,
+            Description = request.Description,
+            PublicNarrative = request.PublicNarrative,
+            ElNabaashNarrative = request.ElNabaashNarrative
+        };
+
+        _dbContext.Sites.Add(site);
+        await _dbContext.SaveChangesAsync(ct);
+
+        return new PrivateSiteResponse
+        {
+            Id = site.Id,
+            Name = site.Name,
+            Location = site.Location,
+            Coordinates = site.Coordinates,
+            Latitude = site.Latitude,
+            Longitude = site.Longitude,
+            Description = site.Description,
+            PublicNarrative = site.PublicNarrative,
+            PrivateNarrative = site.ElNabaashNarrative
+        };
     }
 }
