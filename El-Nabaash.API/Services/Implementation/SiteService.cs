@@ -40,4 +40,22 @@ public class SiteService(AppDbContext _dbContext) : ISiteService
             })
             .FirstOrDefaultAsync(ct);
     }
+
+    public async Task<List<PrivateSiteResponse>> GetAllPrivateSitesAsync(CancellationToken ct)
+    {
+        return await _dbContext.Sites
+            .Select(s => new PrivateSiteResponse
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Location = s.Location,
+                Coordinates = s.Coordinates,
+                Latitude = s.Latitude,
+                Longitude = s.Longitude,
+                Description = s.Description,
+                PublicNarrative = s.PublicNarrative,
+                PrivateNarrative = s.ElNabaashNarrative
+            })
+            .ToListAsync(ct);
+    }
 }
