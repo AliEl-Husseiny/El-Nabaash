@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace El_Nabaash.API.Models;
 
@@ -16,7 +17,9 @@ public class Site
     [MaxLength(200)]
     public string? Description { get; set; }
     public string? PublicNarrative { get; set; }
+    
     [MaxLength(2000)]
+    [JsonPropertyName("AeonNarrative")]
     public string? ElNabaashNarrative { get; set; }
 
 }

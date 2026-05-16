@@ -55,11 +55,29 @@ public static class SiteEndpoints
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status500InternalServerError);
         
+        privateGroup.MapGet("/{id:int}", GetPrivateSiteById)
+            .WithName(nameof(GetPrivateSiteById))
+            .WithSummary("Get Site By Id (Private)")
+            .WithDescription("Return a site with its private data by given Id")
+            .Produces<PrivateSiteResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
+        
+        
         return route;
     }
 
     
     // Handlers Methods for private Sites 
+    
+    private static async Task<IResult> GetPrivateSiteById(int Id, ISiteService siteService, CancellationToken ct)
+    {
+        var site = await siteService.GetPrivateSiteByIdAsync(Id, ct);
+        return site == null ? Results.NotFound($"Site with Id {Id} not found") : Results.Ok(site);
+    }
+    
     private static async Task<IResult> GetAllPrivateSites(ISiteService siteService, CancellationToken ct)
     {
         // Logic to get all sites

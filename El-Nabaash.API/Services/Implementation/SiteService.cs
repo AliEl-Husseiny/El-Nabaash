@@ -58,4 +58,23 @@ public class SiteService(AppDbContext _dbContext) : ISiteService
             })
             .ToListAsync(ct);
     }
+
+    public async Task<PrivateSiteResponse?> GetPrivateSiteByIdAsync(int Id, CancellationToken ct)
+    {
+        return await _dbContext.Sites.AsNoTracking()
+            .Where(s => s.Id == Id)
+            .Select(s => new PrivateSiteResponse
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Location = s.Location,
+                Coordinates = s.Coordinates,
+                Latitude = s.Latitude,
+                Longitude = s.Longitude,
+                Description = s.Description,
+                PublicNarrative = s.PublicNarrative,
+                PrivateNarrative = s.ElNabaashNarrative
+            })
+            .FirstOrDefaultAsync(ct);
+    }
 }
