@@ -29,8 +29,13 @@ public static class SiteEndpoints
             
 
         
-        publicGroup.MapGet("{id:int}",GetPublicSiteById)
-            .
+        publicGroup.MapGet("/{id:int}",GetPublicSiteById)
+            .WithName(nameof(GetPublicSiteById))
+            .WithSummary("Get Site By Id (Public)")
+            .WithDescription("Return a site with its public data by given Id")
+            .Produces<PublicSiteResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
         
         
 
