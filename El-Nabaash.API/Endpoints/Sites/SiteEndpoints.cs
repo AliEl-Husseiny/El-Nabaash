@@ -37,12 +37,38 @@ public static class SiteEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
         
-        
+        // private group 
+        var privateGroup = route.MapGroup("/api/private/sites")
+            .RequireAuthorization()
+            .WithSummary("Private Site Endpoints")
+            .WithDescription("Endpoint that expose private site data")
+            .WithTags("Sites - Private")
+            .RequireAuthorization()
+            .AddEndpointFilter<ExceptionHandlingFilter>();
 
+        
+        privateGroup.MapGet("", GetAllPrivateSites)
+            .WithName(nameof(GetAllPrivateSites))
+            .WithSummary("Get All Sites (Private)")
+            .WithDescription("Return all sites with their private data")
+            .Produces<List<PrivateSiteResponse>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
         return route;
     }
 
-    // Handlers Methods for Sites
+    
+    // Handlers Methods for private Sites 
+    private static async Task<IResult> GetAllPrivateSites(ISiteService siteService, CancellationToken ct)
+    {
+        // Logic to get all sites
+        return Results.Ok(await siteService.GetAllPrivateSitesAsync(ct));
+    }
+    
+    
+    // Handlers Methods for public Sites
+    
     private static async Task<IResult> GetPublicSiteById(int Id, ISiteService siteService, CancellationToken ct)
     {
         var site = await siteService.GetPublicSiteByIdAsync(Id, ct);
