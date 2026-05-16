@@ -90,12 +90,31 @@ public static class SiteEndpoints
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status500InternalServerError);
         
+        privateGroup.MapDelete("/{id:int}", DeleteSite)
+            .WithName(nameof(DeleteSite))
+            .WithSummary("Delete a Site")
+            .WithDescription("Delete a site by given Id requires authentication")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
         return route;
     }
 
     
     // Handlers Methods for private Sites 
 
+    private static async Task<Results<NoContent, NotFound<string>>> DeleteSite(
+        int id,
+        ISiteService siteService,
+        CancellationToken ct)
+    {
+        var success = await siteService.DeleteSiteAsync(id, ct);
+        return success ? TypedResults.NoContent() : TypedResults.NotFound($"Site with Id {id} is not found");
+    }
+    
     private static async Task<Results<NoContent, NotFound<string>, ValidationProblem>> UpdateSite(
         int id,
         UpdateSiteRequest request,
@@ -143,4 +162,6 @@ public static class SiteEndpoints
         // Logic to get all sites
         return Results.Ok(await siteService.GetAllPublicSitesAsync(ct));
     }
+    
+    
 }
