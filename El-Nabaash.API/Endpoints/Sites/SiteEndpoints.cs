@@ -63,10 +63,21 @@ public static class SiteEndpoints
             .WithSummary("Get Site By Id (Private)")
             .WithDescription("Return a site with its private data by given Id")
             .Produces<PrivateSiteResponse>(StatusCodes.Status200OK)
+            .Produces((StatusCodes.Status403Forbidden))
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status500InternalServerError);
         
+        privateGroup.MapPost("",CreateSite)
+            .WithName(nameof(CreateSite))
+            .WithSummary("Create a new Site")
+            .WithDescription("Create a new site with the given data requires authentication")
+            .Accepts<CreateSiteRequest>("application/json")
+            .Produces<PrivateSiteResponse>(StatusCodes.Status201Created)
+            .ProducesValidationProblem()
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status500InternalServerError);
         
         
         return route;
@@ -81,7 +92,9 @@ public static class SiteEndpoints
     CancellationToken ct
     )
     {
-        
+        var createdSite = await siteService.CreateSiteAsync(request, ct);
+        // go to the created site endpoint to get the created site data 
+        return TypedResults.Created($"/api/private/sites/{createdSite.Id}", createdSite);
     }
 
     private static async Task<IResult> GetPrivateSiteById(int Id, ISiteService siteService, CancellationToken ct)
