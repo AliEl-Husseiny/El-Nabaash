@@ -28,11 +28,22 @@ public static class SiteEndpoints
             .Produces(StatusCodes.Status500InternalServerError);
             
 
+        
+        publicGroup.MapGet("{id:int}",GetPublicSiteById)
+            .
+        
+        
 
         return route;
     }
 
     // Handlers Methods for Sites
+    private static async Task<IResult> GetPublicSiteById(int Id, ISiteService siteService, CancellationToken ct)
+    {
+        var site = await siteService.GetPublicSiteByIdAsync(Id, ct);
+        return site == null ? Results.NotFound($"Site with Id {Id} not found") : Results.Ok(site);
+    }
+
     private static async Task<IResult> GetAllPublicSites(ISiteService siteService, CancellationToken ct)
     {
         // Logic to get all sites
