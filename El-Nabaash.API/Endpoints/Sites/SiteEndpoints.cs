@@ -1,6 +1,3 @@
-using El_Nabaash.API.DTOs.Site.Response;
-using El_Nabaash.API.Services.Abstraction;
-
 namespace El_Nabaash.API.Endpoints.Sites;
 
 public static class SiteEndpoints
@@ -15,7 +12,8 @@ public static class SiteEndpoints
             .AllowAnonymous()
             .WithSummary("Public Site Endpoints")
             .WithDescription("Endpoint that expose public site data")
-            .WithTags("Sites - Public");
+            .WithTags("Sites - Public")
+            .AddEndpointFilter<ExceptionHandlingFilter>();
         
         
         
@@ -26,14 +24,31 @@ public static class SiteEndpoints
             .WithDescription("Return all sites with their public data")
             // .Produces(StatusCodes.Status200OK, typeof(List<PublicSiteResponse>));
         // or 
-            .Produces<List<PublicSiteResponse>>(StatusCodes.Status200OK);
+            .Produces<List<PublicSiteResponse>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status500InternalServerError);
             
 
+        
+        publicGroup.MapGet("/{id:int}",GetPublicSiteById)
+            .WithName(nameof(GetPublicSiteById))
+            .WithSummary("Get Site By Id (Public)")
+            .WithDescription("Return a site with its public data by given Id")
+            .Produces<PublicSiteResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
+        
 
         return route;
     }
 
     // Handlers Methods for Sites
+    private static async Task<IResult> GetPublicSiteById(int Id, ISiteService siteService, CancellationToken ct)
+    {
+        var site = await siteService.GetPublicSiteByIdAsync(Id, ct);
+        return site == null ? Results.NotFound($"Site with Id {Id} not found") : Results.Ok(site);
+    }
+
     private static async Task<IResult> GetAllPublicSites(ISiteService siteService, CancellationToken ct)
     {
         // Logic to get all sites
