@@ -13,3 +13,7 @@ global using El_Nabaash.API.DTOs.Identity;
 global using El_Nabaash.API.DTOs.Site.Response;
 global using El_Nabaash.API.Filters;
 global using El_Nabaash.API.Services.Abstraction;
+global using El_Nabaash.API.Endpoints.Artifacts;
+global using El_Nabaash.API.Endpoints.CustomIdentityEndpoints;
+global using El_Nabaash.API.Endpoints.Sites;
+global using El_Nabaash.API.Services.Implementation;
