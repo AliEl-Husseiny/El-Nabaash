@@ -43,7 +43,8 @@ public static class Program
 
         // add custom service 
         builder.Services.AddScoped<ISiteService, SiteService>();
-      
+        builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
+        
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.

@@ -25,7 +25,7 @@ public static class ArtifactMediaFilesEndpoint
             .AddEndpointFilter<ExceptionHandlingFilter>();
 
 
-        privateGroup.MapPost("", CreateArtifactMediaFile)
+        privateGroup.MapPost("/create", CreateArtifactMediaFile)
             .DisableAntiforgery() // cross site scripting 
             .WithName(nameof(CreateArtifactMediaFile))
             .Accepts<IFormFile>("multipart/form-data")
