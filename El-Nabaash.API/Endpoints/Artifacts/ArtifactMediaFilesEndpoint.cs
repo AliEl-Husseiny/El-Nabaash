@@ -7,7 +7,7 @@ public static class ArtifactMediaFilesEndpoint
     // Endpoint group 
     public static IEndpointRouteBuilder MapArtifactMediaFilesEndpoints(this IEndpointRouteBuilder app)
     {
-        var group = app.MapGroup("/api/artifact-media-files")
+        var group = app.MapGroup("/api/public/artifacts/images")
             .WithTags("Artifact Media Files")
             .AddEndpointFilter<ExceptionHandlingFilter>();
 
@@ -25,6 +25,23 @@ public static class ArtifactMediaFilesEndpoint
 
     // assign endpoints 
     // create handlers methods 
+
+    private static async Task<Results<Created, NotFound<string>, BadRequest<string>>> CreateArtifactMediaFile(
+        int artifactId,
+        IFormFile file,
+        bool isPrimary,
+        IArtifactMediaFileService service,
+        CancellationToken ct
+    )
+    {
+        if (file is null || file.Length == 0)
+            return TypedResults.BadRequest("File is required and cannot be empty");
+
+        var media = await service.CreateArtifactMediaFileAsync(artifactId, file, isPrimary, ct);
+        if (media is null) return TypedResults.NotFound($"Artifact with id {artifactId} not found");
+        return TypedResults.Created($"/api/public/artifacts/images/{media.Id}");
+    }
+
     private static async Task<Results<FileContentHttpResult, NotFound<string>>> GetArtifactImage(
         int id,
         AppDbContext dbContext,
