@@ -8,6 +8,8 @@ public class ArtifactMediaFile
     
     public string FileName { get; set; } = string.Empty;
     public string ContentType { get; set; } = "image/jpeg";
+    
+    // storing the images in the database 
     public byte[] Data { get; set; } = [];
     // option to mark one media file as primary 
     public bool IsPrimary { get; set; } = false;
