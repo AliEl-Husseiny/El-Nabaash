@@ -5,13 +5,13 @@ namespace El_Nabaash.API.Endpoints.Artifacts;
 public static class ArtifactMediaFilesEndpoint
 {
     // Endpoint group 
-    public static IEndpointRouteBuilder MapArtifactMediaFilesEndpoints(this IEndpointRouteBuilder app)
+    public static IEndpointRouteBuilder MapArtifactMediaFilesEndpoints(this IEndpointRouteBuilder rout)
     {
-        var group = app.MapGroup("/api/public/artifacts/images")
+        var publicGroup = rout.MapGroup("/api/public/artifacts/images")
             .WithTags("Artifact Media Files")
             .AddEndpointFilter<ExceptionHandlingFilter>();
 
-        group.MapGet("/{id:int}", GetArtifactImage)
+        publicGroup.MapGet("/{id:int}", GetArtifactImage)
             .WithName("GetArtifactImage")
             .Produces<FileContentHttpResult>(StatusCodes.Status200OK)
             .Produces<string>(StatusCodes.Status404NotFound)
@@ -19,8 +19,26 @@ public static class ArtifactMediaFilesEndpoint
             .WithSummary("Get an artifact image by its ID")
             .WithDescription("Retrieves the binary image data for an artifact");
 
+        var privateGroup = rout.MapGroup("/api/private/artifacts/images")
+            .WithTags("Artifact Media Files - Private")
+            .RequireAuthorization()
+            .AddEndpointFilter<ExceptionHandlingFilter>();
 
-        return app;
+
+        privateGroup.MapPost("", CreateArtifactMediaFile)
+            .DisableAntiforgery() // cross site scripting 
+            .WithName(nameof(CreateArtifactMediaFile))
+            .Accepts<IFormFile>("multipart/form-data")
+            .Produces(StatusCodes.Status201Created)
+            .Produces<string>(StatusCodes.Status400BadRequest)
+            .Produces<string>(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .WithSummary("Create a new artifact media file")
+            .WithDescription(
+                "Uploads a new media file for a specific artifact. The file must be an image and cannot be empty. If 'isPrimary' is set to true, this media file will be marked as the primary image for the artifact, and any existing primary media file will be unmarked.");
+
+
+        return rout;
     }
 
     // assign endpoints 
