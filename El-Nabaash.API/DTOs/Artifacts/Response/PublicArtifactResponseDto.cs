@@ -9,4 +9,6 @@ public class PublicArtifactResponseDto
     public DateTime DateDiscovered { get; set; }
     public string? Type { get; set; } 
     public int SiteId { get; set; }
+    public string? SiteName {get; set; }
+    public string? PrimaryImageUrl { get; set; }
 }
