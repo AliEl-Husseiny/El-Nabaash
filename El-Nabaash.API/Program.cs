@@ -44,7 +44,7 @@ public static class Program
         // add custom service 
         builder.Services.AddScoped<ISiteService, SiteService>();
         builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
-        
+        builder.Services.AddScoped<IArtifactService, ArtifactService>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -75,6 +75,7 @@ public static class Program
         app.MapCustomIdentityEndpoints();
         app.MapSiteEndpoints();
         app.MapArtifactMediaFilesEndpoints();
+        app.MapArtifactEndpoints();
         await app.RunAsync();
     }
 }
