@@ -32,6 +32,9 @@ public static class OpenApiSwaggerExtensions
                     Url = new Uri("https://linktr.ee/ali.ahmed.software.engineer")
                 }
             });
+            // assign EnumStringFilter as a SchemaFilter
+            opt.SchemaFilter<EnumStringFilter>();
+            
             opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
                 Name = "Authorization",
