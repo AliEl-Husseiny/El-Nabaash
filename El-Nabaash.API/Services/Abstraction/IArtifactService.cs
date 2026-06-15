@@ -5,4 +5,6 @@ namespace El_Nabaash.API.Services.Abstraction;
 public interface IArtifactService
 {
     Task<List<PublicArtifactResponseDto>> GetPublicArtifactAsync(CancellationToken ct);
+    Task<List<PrivateArtifactResponseDto>> GetPrivateArtifactAsync(CancellationToken ct);
+    
 }
