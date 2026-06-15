@@ -1,10 +1,12 @@
+using El_Nabaash.API.DTOs.Catalog.Request;
 using El_Nabaash.API.DTOs.CatalogRecord.Response;
 
 namespace El_Nabaash.API.Services.Implementation;
 
 public class CatalogRecordService(AppDbContext dbContext) : ICatalogRecordService
 {
-    public async Task<List<CatalogRecordResponseDto>?> GetCatalogRecordsByArtifactAsync(int artifactId, CancellationToken ct)
+    public async Task<List<CatalogRecordResponseDto>?> GetCatalogRecordsByArtifactAsync(int artifactId,
+        CancellationToken ct)
     {
         // Step A – Confirm the artifact exists
         var exists = await dbContext.Artifacts
@@ -74,6 +76,48 @@ public class CatalogRecordService(AppDbContext dbContext) : ICatalogRecordServic
             })
             .FirstOrDefaultAsync(ct);
 
-        return record; 
+        return record;
+    }
+
+    public async Task<CatalogRecordResponseDto?> CreateCatalogRecordAsync(CreateCatalogRecordRequestDto request,
+        string userId, CancellationToken ct)
+    {
+        // Step A — Validate artifact
+        var artifact = await dbContext.Artifacts
+            .AsNoTracking()
+            .FirstOrDefaultAsync(a => a.Id == request.ArtifactId, ct);
+
+        if (artifact is null)
+            return null;
+
+        // Step B — Create entity
+        var record = new CatalogRecord
+        {
+            ArtifactId = request.ArtifactId,
+            Status = request.Status,
+            SubmittedById = userId,
+            DateSubmitted = DateTime.UtcNow
+        };
+
+        dbContext.CatalogRecords.Add(record);
+        await dbContext.SaveChangesAsync(ct);
+
+        // Step C — Re-load with navigation properties
+        var created = await dbContext.CatalogRecords
+            .AsNoTracking()
+            .Include(r => r.SubmittedBy)
+            .FirstAsync(r => r.Id == record.Id, ct);
+
+        // Step D — Project into DTO
+        return new CatalogRecordResponseDto()
+        {
+            Id = created.Id,
+            ArtifactId = created.ArtifactId,
+            Status = created.Status,
+            DateSubmitted = created.DateSubmitted,
+            SubmittedBy = $"{created.SubmittedBy.FirstName} {created.SubmittedBy.LastName}",
+            VerifiedBy = null,
+            Notes = new List<CatalogNoteResponseDto>()
+        };
     }
 }
