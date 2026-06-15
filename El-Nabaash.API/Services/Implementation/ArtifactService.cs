@@ -130,8 +130,8 @@ public class ArtifactService(AppDbContext dbContext) : IArtifactService
             Description = artifact.Description,
             PublicNarrative = artifact.PublicNarrative,
             DateDiscovered = artifact.DateDiscovered,
-            Type = artifact.Type.ToString(),
-            SiteName = (await db.Sites.FindAsync([artifact.SiteId], ct))?.Name ?? string.Empty
+            Type = artifact.Type,
+            SiteName = (await dbContext.Sites.FindAsync([artifact.SiteId], ct))?.Name ?? string.Empty
         };
     }
 }
