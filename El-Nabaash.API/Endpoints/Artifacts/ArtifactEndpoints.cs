@@ -38,8 +38,19 @@ public static class ArtifactEndpoints
             .WithName("GetPrivateArtifacts")
             .WithSummary("Get all private artifacts")
             .WithDescription("Retrieves a list of all artifacts, including their details and primary image URLs. This endpoint requires authentication and is intended for internal use.")
-            .Produces(StatusCodes.Status404NotFound);
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .Produces<List<PrivateArtifactResponseDto>>(StatusCodes.Status200OK);
         
+            privateGroup.MapGet("/{id:int}",GetPrivateArtifactsBySite)
+            .WithName(nameof(GetPrivateArtifactsBySite))
+            .WithSummary("Get private artifacts by site ID")
+            .WithDescription("Retrieves a list of all private artifacts associated with a specific site ID. This endpoint requires authentication and is intended for internal use.")
+            .Produces<List<PrivateArtifactResponseDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+                
         return route;
     }
 
