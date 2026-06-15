@@ -37,6 +37,16 @@ public static class ArtifactEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
+        
+        publicGroup.MapGet("/{id:int}", GetPublicArtifactById)
+            .WithName(nameof(GetPublicArtifactById))
+            .WithSummary("Get Public Artifact by ID")
+            .WithDescription("Returns a single artifact with public-safe data.")
+            .Produces<PublicArtifactResponseDto>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
+        
         privateGroup.MapGet("", GetPrivateArtifact)
             .WithName("GetPrivateArtifacts")
             .WithSummary("Get all private artifacts")
