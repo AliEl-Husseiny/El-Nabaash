@@ -25,6 +25,11 @@ public static class ArtifactEndpoints
             .WithDescription("Retrieves a list of all artifacts that are marked as public, including their details and primary image URLs.")
             .Produces(StatusCodes.Status404NotFound);
 
+        
+        publicGroup.MapGet("/{id:int}",GetPublicArtifactsBySite)
+            .WithName(nameof(GetPublicArtifactsBySite))
+            
+        
         privateGroup.MapGet("", GetPrivateArtifact)
             .WithName("GetPrivateArtifacts")
             .WithSummary("Get all private artifacts")
@@ -60,5 +65,15 @@ public static class ArtifactEndpoints
             return TypedResults.NotFound();
         }
         return TypedResults.Ok(artifacts);
+    }
+
+    private static async Task<Results<Ok<List<PublicArtifactResponseDto>>, NotFound>> GetPublicArtifactsBySite
+        (
+            int siteId,
+            IArtifactService service,
+            CancellationToken ct
+        )
+    {
+        
     }
 }
