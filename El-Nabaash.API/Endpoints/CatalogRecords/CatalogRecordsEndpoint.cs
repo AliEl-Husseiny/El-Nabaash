@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using El_Nabaash.API.DTOs.Catalog.Request;
 using El_Nabaash.API.DTOs.CatalogRecord.Response;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -26,6 +28,15 @@ public static class CatalogRecordsEndpoint
             .WithDescription("Returns a single catalog record including submitter, verifier, and notes.")
             .Produces<CatalogRecordResponseDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
+        
+        privateGroup.MapPost("", CreateCatalogRecord)
+            .WithName(nameof(CreateCatalogRecord))
+            .WithSummary("Create Catalog Record")
+            .WithDescription("Creates a new catalog record for an artifact.")
+            .Produces<CatalogRecordResponseDto>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
         
         return route;
@@ -59,5 +70,27 @@ public static class CatalogRecordsEndpoint
             return TypedResults.NotFound();
 
         return TypedResults.Ok(record);
+    }
+    
+    private static async Task<Results<Created<CatalogRecordResponseDto>, BadRequest>>
+        CreateCatalogRecord(
+            CreateCatalogRecordRequestDto request,
+            ClaimsPrincipal user,
+            ICatalogRecordService service,
+            CancellationToken ct)
+    {
+        var userId = user.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        if (string.IsNullOrEmpty(userId))
+            return TypedResults.BadRequest();
+
+        var result = await service.CreateCatalogRecordAsync(request, userId, ct);
+
+        if (result is null)
+            return TypedResults.BadRequest(); // artifact not found or bad input
+
+        return TypedResults.Created(
+            $"/api/private/catalogrecords/{result.Id}",
+            result);
     }
 }
