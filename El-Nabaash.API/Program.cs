@@ -1,3 +1,5 @@
+using El_Nabaash.API.Endpoints.CatalogRecords;
+
 namespace El_Nabaash.API;
 
 public static class Program
@@ -41,10 +43,11 @@ public static class Program
         //add email sender services 
         builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
-        // add custom service 
+        // register custom service 
         builder.Services.AddScoped<ISiteService, SiteService>();
         builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
         builder.Services.AddScoped<IArtifactService, ArtifactService>();
+        builder.Services.AddScoped<ICatalogRecordService, CatalogRecordService>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -65,17 +68,18 @@ public static class Program
 
         authRouteGroup.MapIdentityApi<ApplicationUser>();
 
-        
+
         using (var scope = app.Services.CreateScope())
         {
             await DataSeed.ManageDataAsync(scope.ServiceProvider);
         }
-        
+
         app.MapHomeEndpoints();
         app.MapCustomIdentityEndpoints();
         app.MapSiteEndpoints();
         app.MapArtifactMediaFilesEndpoints();
         app.MapArtifactEndpoints();
+        app.MapCatalogRecordEndpoints();
         await app.RunAsync();
     }
 }
