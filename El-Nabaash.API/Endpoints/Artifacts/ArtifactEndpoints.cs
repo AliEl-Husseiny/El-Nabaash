@@ -25,7 +25,11 @@ public static class ArtifactEndpoints
             .WithDescription("Retrieves a list of all artifacts that are marked as public, including their details and primary image URLs.")
             .Produces(StatusCodes.Status404NotFound);
 
-        
+        privateGroup.MapGet("", GetPrivateArtifact)
+            .WithName("GetPrivateArtifacts")
+            .WithSummary("Get all private artifacts")
+            .WithDescription("Retrieves a list of all artifacts, including their details and primary image URLs. This endpoint requires authentication and is intended for internal use.")
+            .Produces(StatusCodes.Status404NotFound);
         
         return route;
     }
