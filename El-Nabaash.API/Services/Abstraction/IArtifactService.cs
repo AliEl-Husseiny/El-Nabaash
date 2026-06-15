@@ -1,3 +1,4 @@
+using El_Nabaash.API.DTOs.Artifacts.Request;
 using El_Nabaash.API.DTOs.Artifacts.Response;
 
 namespace El_Nabaash.API.Services.Abstraction;
@@ -11,5 +12,6 @@ public interface IArtifactService
     // private
     Task<List<PrivateArtifactResponseDto>> GetPrivateArtifactAsync(CancellationToken ct);
     Task<List<PrivateArtifactResponseDto>> GetPrivateArtifactsBySiteAsync(CancellationToken ct);
-    
+    Task<PrivateArtifactResponseDto?> CreateArtifactAsync(CreateArtifactRequestDto createArtifactRequest, CancellationToken ct);
+
 }
