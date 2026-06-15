@@ -152,4 +152,19 @@ public class CatalogRecordService(AppDbContext dbContext) : ICatalogRecordServic
 
         return true;
     }
+
+    public async Task<bool> DeleteCatalogRecordAsync(int id, CancellationToken ct)
+    {
+        // Step A — Lookup record
+        var record = await dbContext.CatalogRecords.FindAsync([id], ct);
+
+        if (record is null)
+            return false;
+
+        // Step B — Delete and save
+        dbContext.CatalogRecords.Remove(record);
+        await dbContext.SaveChangesAsync(ct);
+
+        return true;
+    }
 }
