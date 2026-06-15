@@ -43,10 +43,11 @@ public static class Program
         //add email sender services 
         builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
 
-        // add custom service 
+        // register custom service 
         builder.Services.AddScoped<ISiteService, SiteService>();
         builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
         builder.Services.AddScoped<IArtifactService, ArtifactService>();
+        builder.Services.AddScoped<ICatalogRecordService, CatalogRecordService>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
