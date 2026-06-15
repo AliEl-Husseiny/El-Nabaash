@@ -120,4 +120,36 @@ public class CatalogRecordService(AppDbContext dbContext) : ICatalogRecordServic
             Notes = new List<CatalogNoteResponseDto>()
         };
     }
+
+    public async Task<bool> UpdateCatalogRecordAsync(int id, UpdateCatalogRecordRequestDto request, CancellationToken ct)
+    {
+        // Step A — Retrieve existing record
+        var record = await dbContext.CatalogRecords.FindAsync([id], ct);
+
+        if (record is null)
+            return false;
+
+        // Step B — Update fields
+        record.Status = request.Status;
+
+        // Step C — Update or clear VerifiedById
+        if (string.IsNullOrWhiteSpace(request.VerifiedById))
+        {
+            record.VerifiedById = null;
+        }
+        else
+        {
+            // Optionally validate verified user ID exists
+            var userExists = await dbContext.Users.AnyAsync(u => u.Id == request.VerifiedById, ct);
+            if (!userExists)
+                return false;
+
+            record.VerifiedById = request.VerifiedById;
+        }
+
+        // Step D — Save changes
+        await dbContext.SaveChangesAsync(ct);
+
+        return true;
+    }
 }
