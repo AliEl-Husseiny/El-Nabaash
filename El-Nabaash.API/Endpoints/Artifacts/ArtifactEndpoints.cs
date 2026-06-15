@@ -33,7 +33,7 @@ public static class ArtifactEndpoints
             .WithName(nameof(GetPublicArtifactsBySite))
             .WithSummary("Get public artifacts by site ID")
             .WithDescription("Retrieves a list of all public artifacts associated with a specific site ID")
-            .Produces<List<PublicArtifactResponseDto>>(StatusCodes.Status200OK)
+            // .Produces<List<PublicArtifactResponseDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
@@ -44,15 +44,15 @@ public static class ArtifactEndpoints
                 "Retrieves a list of all artifacts, including their details and primary image URLs. This endpoint requires authentication and is intended for internal use.")
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)
-            .Produces(StatusCodes.Status500InternalServerError)
-            .Produces<List<PrivateArtifactResponseDto>>(StatusCodes.Status200OK);
+            .Produces(StatusCodes.Status500InternalServerError);
+            // .Produces<List<PrivateArtifactResponseDto>>(StatusCodes.Status200OK);
 
         privateGroup.MapGet("/{id:int}", GetPrivateArtifactsBySite)
             .WithName(nameof(GetPrivateArtifactsBySite))
             .WithSummary("Get private artifacts by site ID")
             .WithDescription(
                 "Retrieves a list of all private artifacts associated with a specific site ID. This endpoint requires authentication and is intended for internal use.")
-            .Produces<List<PrivateArtifactResponseDto>>(StatusCodes.Status200OK)
+            // .Produces<List<PrivateArtifactResponseDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
@@ -147,5 +147,18 @@ public static class ArtifactEndpoints
         }
 
         return TypedResults.Created($"/api/private/artifacts/{artifact.Id}", artifact);
+    }
+    
+    private static async Task<Results<Ok<PublicArtifactResponseDto>, NotFound>> GetPublicArtifactById(
+        int id,
+        IArtifactService service,
+        CancellationToken ct)
+    {
+        var artifact = await service.GetPublicArtifactByIdAsync(id, ct);
+
+        if (artifact is null)
+            return TypedResults.NotFound();
+
+        return TypedResults.Ok(artifact);
     }
 }
