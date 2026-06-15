@@ -13,4 +13,5 @@ public interface ICatalogRecordService
         string userId,
         CancellationToken ct);
     Task<bool> UpdateCatalogRecordAsync(int id, UpdateCatalogRecordRequestDto request, CancellationToken ct);
+    Task<bool> DeleteCatalogRecordAsync(int id, CancellationToken ct);
 }

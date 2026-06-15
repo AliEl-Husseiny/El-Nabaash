@@ -29,8 +29,8 @@ public static class CatalogRecordsEndpoint
             .Produces<CatalogRecordResponseDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
-        
-        
+
+
         privateGroup.MapPost("", CreateCatalogRecord)
             .WithName(nameof(CreateCatalogRecord))
             .WithSummary("Create Catalog Record")
@@ -38,12 +38,21 @@ public static class CatalogRecordsEndpoint
             .Produces<CatalogRecordResponseDto>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
-        
-        
+
+
         privateGroup.MapPut("/{id:int}", UpdateCatalogRecord)
             .WithName(nameof(UpdateCatalogRecord))
             .WithSummary("Update Catalog Record")
             .WithDescription("Updates a catalog record’s status and verifier.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
+        
+        privateGroup.MapDelete("/{id:int}", DeleteCatalogRecord)
+            .WithName(nameof(DeleteCatalogRecord))
+            .WithSummary("Delete Catalog Record")
+            .WithDescription("Deletes a catalog record by its ID.")
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
@@ -66,7 +75,7 @@ public static class CatalogRecordsEndpoint
 
         return TypedResults.Ok(records);
     }
-    
+
     private static async Task<Results<Ok<CatalogRecordResponseDto>, NotFound>>
         GetCatalogRecordById(
             int id,
@@ -80,7 +89,7 @@ public static class CatalogRecordsEndpoint
 
         return TypedResults.Ok(record);
     }
-    
+
     private static async Task<Results<Created<CatalogRecordResponseDto>, BadRequest>>
         CreateCatalogRecord(
             CreateCatalogRecordRequestDto request,
@@ -102,7 +111,7 @@ public static class CatalogRecordsEndpoint
             $"/api/private/catalogrecords/{result.Id}",
             result);
     }
-    
+
     private static async Task<Results<NoContent, NotFound>>
         UpdateCatalogRecord(
             int id,
@@ -111,6 +120,20 @@ public static class CatalogRecordsEndpoint
             CancellationToken ct)
     {
         var success = await service.UpdateCatalogRecordAsync(id, request, ct);
+
+        if (!success)
+            return TypedResults.NotFound();
+
+        return TypedResults.NoContent();
+    }
+
+    private static async Task<Results<NoContent, NotFound>>
+        DeleteCatalogRecord(
+            int id,
+            ICatalogRecordService service,
+            CancellationToken ct)
+    {
+        var success = await service.DeleteCatalogRecordAsync(id, ct);
 
         if (!success)
             return TypedResults.NotFound();
