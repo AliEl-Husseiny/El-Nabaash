@@ -55,6 +55,18 @@ public static class ArtifactEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
+        
+        privateGroup.MapPost("", CreateArtifact)
+            .WithName(nameof(CreateArtifact))
+            .Produces<PrivateArtifactResponseDto>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status401Unauthorized)
+            .Produces(StatusCodes.Status500InternalServerError)
+            .WithSummary("Create New Artifact")
+            .WithDescription("Creates a new artifact record (metadata only).");
+
+        
         return route;
     }
 
