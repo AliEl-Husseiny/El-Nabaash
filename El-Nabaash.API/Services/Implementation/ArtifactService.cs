@@ -1,6 +1,7 @@
 using El_Nabaash.API.DTOs.Artifacts.Request;
 using El_Nabaash.API.DTOs.Artifacts.Response;
 using El_Nabaash.API.Enums;
+using PublicArtifactResponseDto = El_Nabaash.API.DTOs.Artifacts.Response.PublicArtifactResponseDto;
 
 namespace El_Nabaash.API.Services.Implementation;
 
@@ -133,5 +134,29 @@ public class ArtifactService(AppDbContext dbContext) : IArtifactService
             Type = artifact.Type,
             SiteName = (await dbContext.Sites.FindAsync([artifact.SiteId], ct))?.Name ?? string.Empty
         };
+    }
+    
+    public async Task<PublicArtifactResponseDto?> GetPublicArtifactByIdAsync(int id, CancellationToken ct)
+    {
+        var artifact = await dbContext.Artifacts
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .Select(a => new PublicArtifactResponseDto()
+            {
+                Id = a.Id,
+                Name = a.Name!,
+                CatalogNumber = a.CatalogNumber!,
+                PublicNarrative = a.PublicNarrative,
+                DateDiscovered = a.DateDiscovered,
+                Type = a.Type.ToString(),
+                SiteName = a.Site!.Name!,
+                PrimaryImageUrl = a.MediaFiles
+                    .Where(m => m.IsPrimary)
+                    .Select(m => $"/api/public/artifacts/images/{m.Id}")
+                    .FirstOrDefault()
+            })
+            .FirstOrDefaultAsync(ct);
+
+        return artifact;
     }
 }
