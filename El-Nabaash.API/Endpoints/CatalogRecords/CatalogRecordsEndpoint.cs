@@ -39,6 +39,15 @@ public static class CatalogRecordsEndpoint
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
         
+        
+        privateGroup.MapPut("/{id:int}", UpdateCatalogRecord)
+            .WithName(nameof(UpdateCatalogRecord))
+            .WithSummary("Update Catalog Record")
+            .WithDescription("Updates a catalog record’s status and verifier.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
         return route;
     }
 
@@ -92,5 +101,20 @@ public static class CatalogRecordsEndpoint
         return TypedResults.Created(
             $"/api/private/catalogrecords/{result.Id}",
             result);
+    }
+    
+    private static async Task<Results<NoContent, NotFound>>
+        UpdateCatalogRecord(
+            int id,
+            UpdateCatalogRecordRequestDto request,
+            ICatalogRecordService service,
+            CancellationToken ct)
+    {
+        var success = await service.UpdateCatalogRecordAsync(id, request, ct);
+
+        if (!success)
+            return TypedResults.NotFound();
+
+        return TypedResults.NoContent();
     }
 }
