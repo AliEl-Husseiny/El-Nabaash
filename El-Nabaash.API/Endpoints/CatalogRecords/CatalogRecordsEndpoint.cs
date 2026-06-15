@@ -39,6 +39,15 @@ public static class CatalogRecordsEndpoint
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status500InternalServerError);
         
+        
+        privateGroup.MapPut("/{id:int}", UpdateCatalogRecord)
+            .WithName(nameof(UpdateCatalogRecord))
+            .WithSummary("Update Catalog Record")
+            .WithDescription("Updates a catalog record’s status and verifier.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
         return route;
     }
 
