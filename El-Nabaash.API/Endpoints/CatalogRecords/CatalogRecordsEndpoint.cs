@@ -93,4 +93,19 @@ public static class CatalogRecordsEndpoint
             $"/api/private/catalogrecords/{result.Id}",
             result);
     }
+    
+    private static async Task<Results<NoContent, NotFound>>
+        UpdateCatalogRecord(
+            int id,
+            UpdateCatalogRecordRequestDto request,
+            ICatalogRecordService service,
+            CancellationToken ct)
+    {
+        var success = await service.UpdateCatalogRecordAsync(id, request, ct);
+
+        if (!success)
+            return TypedResults.NotFound();
+
+        return TypedResults.NoContent();
+    }
 }
