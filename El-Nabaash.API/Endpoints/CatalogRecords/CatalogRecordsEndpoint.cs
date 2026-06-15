@@ -20,6 +20,14 @@ public static class CatalogRecordsEndpoint
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
+        privateGroup.MapGet("/{id:int}", GetCatalogRecordById)
+            .WithName(nameof(GetCatalogRecordById))
+            .WithSummary("Get Catalog Record by ID")
+            .WithDescription("Returns a single catalog record including submitter, verifier, and notes.")
+            .Produces<CatalogRecordResponseDto>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
         return route;
     }
 
