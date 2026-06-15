@@ -14,7 +14,10 @@ public static class ArtifactEndpoints
             .AddEndpointFilter<ExceptionHandlingFilter>()
             .AllowAnonymous();
         
-        
+        var privateGroup = route.MapGroup("api/private/artifacts")
+            .WithTags("Artifact - Private")
+            .AddEndpointFilter<ExceptionHandlingFilter>()
+            .RequireAuthorization();
         
         publicGroup.MapGet("", GetPublicArtifact)
             .WithName("GetPublicArtifacts")
@@ -22,7 +25,7 @@ public static class ArtifactEndpoints
             .WithDescription("Retrieves a list of all artifacts that are marked as public, including their details and primary image URLs.")
             .Produces(StatusCodes.Status404NotFound);
 
-       
+        
         
         return route;
     }
