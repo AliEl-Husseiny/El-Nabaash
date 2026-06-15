@@ -1,5 +1,6 @@
 using El_Nabaash.API.DTOs.Artifacts.Request;
 using El_Nabaash.API.DTOs.Artifacts.Response;
+using PublicArtifactResponseDto = El_Nabaash.API.DTOs.Artifacts.Response.PublicArtifactResponseDto;
 
 namespace El_Nabaash.API.Services.Abstraction;
 
