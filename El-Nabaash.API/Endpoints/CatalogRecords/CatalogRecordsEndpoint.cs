@@ -38,4 +38,18 @@ public static class CatalogRecordsEndpoint
 
         return TypedResults.Ok(records);
     }
+    
+    private static async Task<Results<Ok<CatalogRecordResponseDto>, NotFound>>
+        GetCatalogRecordById(
+            int id,
+            ICatalogRecordService service,
+            CancellationToken ct)
+    {
+        var record = await service.GetCatalogRecordByIdAsync(id, ct);
+
+        if (record is null)
+            return TypedResults.NotFound();
+
+        return TypedResults.Ok(record);
+    }
 }
