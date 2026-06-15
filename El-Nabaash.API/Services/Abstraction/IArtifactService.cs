@@ -10,5 +10,6 @@ public interface IArtifactService
     
     // private
     Task<List<PrivateArtifactResponseDto>> GetPrivateArtifactAsync(CancellationToken ct);
+    Task<List<PrivateArtifactResponseDto>> GetPrivateArtifactsBySiteAsync(CancellationToken ct);
     
 }

@@ -2,6 +2,8 @@ using El_Nabaash.API.DTOs.Artifacts.Response;
 
 namespace El_Nabaash.API.Services.Implementation;
 
+
+
 public class ArtifactService(AppDbContext dbContext) : IArtifactService
 {
     public async Task<List<PublicArtifactResponseDto>> GetPublicArtifactAsync(CancellationToken ct)
@@ -47,6 +49,28 @@ public class ArtifactService(AppDbContext dbContext) : IArtifactService
     }
 
     public async Task<List<PrivateArtifactResponseDto>> GetPrivateArtifactAsync(CancellationToken ct)
+    {
+        return await dbContext.Artifacts
+            .AsNoTracking()
+            .Select(a => new PrivateArtifactResponseDto()
+            {
+                Id = a.Id,
+                Name = a.Name,
+                CatalogNumber = a.CatalogNumber,
+                PublicNarrative = a.PublicNarrative,
+                DateDiscovered = a.DateDiscovered,
+                Description = a.Description,
+                Type = a.Type!.ToString(),
+                SiteId = a.SiteId,
+                SiteName = a.Site!.Name,
+                PrimaryImageUrl = a.MediaFiles
+                    .Where(ai => ai.IsPrimary)
+                    .Select(ai => $"/api/public/artifacts/images/{ai.Id}")
+                    .FirstOrDefault()
+            }).ToListAsync(ct);
+    }
+
+    public async Task<List<PrivateArtifactResponseDto>> GetPrivateArtifactsBySiteAsync(CancellationToken ct)
     {
         return await dbContext.Artifacts
             .AsNoTracking()
