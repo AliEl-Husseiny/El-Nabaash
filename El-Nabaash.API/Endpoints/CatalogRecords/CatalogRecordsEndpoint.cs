@@ -1,12 +1,28 @@
 using El_Nabaash.API.DTOs.CatalogRecord.Response;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace El_Nabaash.API.Endpoints.Artifacts;
+namespace El_Nabaash.API.Endpoints.CatalogRecords;
 
-public class CatalogRecordsEndpoint
+public static class CatalogRecordsEndpoint
 {
     
-    
+    public static IEndpointRouteBuilder MapCatalogRecordEndpoints(this IEndpointRouteBuilder route)
+    {
+        var privateGroup = route.MapGroup("/api/private/catalogrecords")
+            .RequireAuthorization()
+            .WithTags("CatalogRecords")
+            .AddEndpointFilter<ExceptionHandlingFilter>();
+
+        privateGroup.MapGet("/artifact/{artifactId:int}", GetCatalogRecordsByArtifact)
+            .WithName(nameof(GetCatalogRecordsByArtifact))
+            .WithSummary("Get Catalog Records by Artifact")
+            .WithDescription("Returns all catalog records associated with the specified artifact.")
+            .Produces<List<CatalogRecordResponseDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
+        return route;
+    }
     
     
     
