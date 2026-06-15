@@ -44,4 +44,36 @@ public class CatalogRecordService(AppDbContext dbContext) : ICatalogRecordServic
 
         return records;
     }
+
+    public async Task<CatalogRecordResponseDto?> GetCatalogRecordByIdAsync(int id, CancellationToken ct)
+    {
+        var record = await dbContext.CatalogRecords
+            .AsNoTracking()
+            .Where(r => r.Id == id)
+            .Include(r => r.SubmittedBy)
+            .Include(r => r.VerifiedBy)
+            .Include(r => r.Notes)
+            .ThenInclude(n => n.Author)
+            .Select(r => new CatalogRecordResponseDto()
+            {
+                Id = r.Id,
+                ArtifactId = r.ArtifactId,
+                Status = r.Status,
+                DateSubmitted = r.DateSubmitted,
+                SubmittedBy = $"{r.SubmittedBy.FirstName} {r.SubmittedBy.LastName}",
+                VerifiedBy = r.VerifiedBy != null
+                    ? $"{r.VerifiedBy.FirstName} {r.VerifiedBy.LastName}"
+                    : null,
+                Notes = r.Notes.Select(n => new CatalogNoteResponseDto()
+                {
+                    Id = n.Id,
+                    Content = n.Content,
+                    Created = n.CreatedAt,
+                    Author = $"{n.Author.FirstName} {n.Author.LastName}"
+                }).ToList()
+            })
+            .FirstOrDefaultAsync(ct);
+
+        return record; 
+    }
 }
