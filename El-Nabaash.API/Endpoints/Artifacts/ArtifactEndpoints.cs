@@ -85,4 +85,19 @@ public static class ArtifactEndpoints
         }
         return TypedResults.Ok(artifacts);
     }
+    
+    private static async Task<Results<Ok<List<PrivateArtifactResponseDto>>, NotFound>> GetPrivateArtifactsBySite
+        (
+            int siteId,
+            IArtifactService service,
+            CancellationToken ct
+        )
+    {
+        var artifacts = await service.GetPrivateArtifactsBySiteAsync(ct);
+        if (artifacts.Count == 0)
+        {
+            return TypedResults.NotFound();
+        }
+        return TypedResults.Ok(artifacts);
+    }
 }
