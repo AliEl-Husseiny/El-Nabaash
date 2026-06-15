@@ -30,6 +30,15 @@ public static class CatalogRecordsEndpoint
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
         
+        
+        privateGroup.MapPost("", CreateCatalogRecord)
+            .WithName(nameof(CreateCatalogRecord))
+            .WithSummary("Create Catalog Record")
+            .WithDescription("Creates a new catalog record for an artifact.")
+            .Produces<CatalogRecordResponseDto>(StatusCodes.Status201Created)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
         return route;
     }
 
