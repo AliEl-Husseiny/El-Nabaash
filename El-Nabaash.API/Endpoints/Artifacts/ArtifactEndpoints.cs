@@ -28,9 +28,13 @@ public static class ArtifactEndpoints
         
         publicGroup.MapGet("/{id:int}",GetPublicArtifactsBySite)
             .WithName(nameof(GetPublicArtifactsBySite))
-            
-        
-        privateGroup.MapGet("", GetPrivateArtifact)
+            .WithSummary("Get public artifacts by site ID")
+            .WithDescription("Retrieves a list of all public artifacts associated with a specific site ID")
+            .Produces<List<PublicArtifactResponseDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+
+            privateGroup.MapGet("", GetPrivateArtifact)
             .WithName("GetPrivateArtifacts")
             .WithSummary("Get all private artifacts")
             .WithDescription("Retrieves a list of all artifacts, including their details and primary image URLs. This endpoint requires authentication and is intended for internal use.")
@@ -74,6 +78,11 @@ public static class ArtifactEndpoints
             CancellationToken ct
         )
     {
-        
+        var artifacts = await service.GetPublicArtifactsBySiteAsync(ct);
+        if (artifacts.Count == 0)
+        {
+            return TypedResults.NotFound();
+        }
+        return TypedResults.Ok(artifacts);
     }
 }
