@@ -48,6 +48,15 @@ public static class CatalogRecordsEndpoint
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
+        
+        privateGroup.MapDelete("/{id:int}", DeleteCatalogRecord)
+            .WithName(nameof(DeleteCatalogRecord))
+            .WithSummary("Delete Catalog Record")
+            .WithDescription("Deletes a catalog record by its ID.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
         return route;
     }
 
