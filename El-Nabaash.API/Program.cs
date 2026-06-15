@@ -1,3 +1,5 @@
+using El_Nabaash.API.Endpoints.CatalogRecords;
+
 namespace El_Nabaash.API;
 
 public static class Program
@@ -65,17 +67,18 @@ public static class Program
 
         authRouteGroup.MapIdentityApi<ApplicationUser>();
 
-        
+
         using (var scope = app.Services.CreateScope())
         {
             await DataSeed.ManageDataAsync(scope.ServiceProvider);
         }
-        
+
         app.MapHomeEndpoints();
         app.MapCustomIdentityEndpoints();
         app.MapSiteEndpoints();
         app.MapArtifactMediaFilesEndpoints();
         app.MapArtifactEndpoints();
+        app.MapCatalogRecordEndpoints();
         await app.RunAsync();
     }
 }

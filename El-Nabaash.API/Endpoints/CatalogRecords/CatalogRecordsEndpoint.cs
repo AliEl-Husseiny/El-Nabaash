@@ -5,7 +5,6 @@ namespace El_Nabaash.API.Endpoints.CatalogRecords;
 
 public static class CatalogRecordsEndpoint
 {
-    
     public static IEndpointRouteBuilder MapCatalogRecordEndpoints(this IEndpointRouteBuilder route)
     {
         var privateGroup = route.MapGroup("/api/private/catalogrecords")
@@ -23,11 +22,8 @@ public static class CatalogRecordsEndpoint
 
         return route;
     }
-    
-    
-    
-    
-    
+
+
     // Handlers
     private static async Task<Results<Ok<List<CatalogRecordResponseDto>>, NotFound>>
         GetCatalogRecordsByArtifact(
