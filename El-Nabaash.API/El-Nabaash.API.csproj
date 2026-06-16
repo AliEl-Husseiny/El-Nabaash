@@ -6,6 +6,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <RootNamespace>El_Nabaash.API</RootNamespace>
         <UserSecretsId>dd9eed94-f0bd-49d7-b892-0630db29b861</UserSecretsId>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
