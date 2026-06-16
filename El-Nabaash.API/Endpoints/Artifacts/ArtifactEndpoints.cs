@@ -29,20 +29,14 @@ public static class ArtifactEndpoints
             .Produces(StatusCodes.Status404NotFound);
 
 
-        publicGroup.MapGet("/{id:int}", GetPublicArtifactsBySite)
-            .WithName(nameof(GetPublicArtifactsBySite))
-            .WithSummary("Get public artifacts by site ID")
-            .WithDescription("Retrieves a list of all public artifacts associated with a specific site ID")
-            // .Produces<List<PublicArtifactResponseDto>>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound)
-            .Produces(StatusCodes.Status500InternalServerError);
+        
 
         
         publicGroup.MapGet("/{id:int}", GetPublicArtifactById)
             .WithName(nameof(GetPublicArtifactById))
             .WithSummary("Get Public Artifact by ID")
             .WithDescription("Returns a single artifact with public-safe data.")
-            .Produces<PublicArtifactResponseDto>(StatusCodes.Status200OK)
+            // .Produces<PublicArtifactResponseDto>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
 
@@ -57,14 +51,7 @@ public static class ArtifactEndpoints
             .Produces(StatusCodes.Status500InternalServerError);
             // .Produces<List<PrivateArtifactResponseDto>>(StatusCodes.Status200OK);
 
-        privateGroup.MapGet("/{id:int}", GetPrivateArtifactsBySite)
-            .WithName(nameof(GetPrivateArtifactsBySite))
-            .WithSummary("Get private artifacts by site ID")
-            .WithDescription(
-                "Retrieves a list of all private artifacts associated with a specific site ID. This endpoint requires authentication and is intended for internal use.")
-            // .Produces<List<PrivateArtifactResponseDto>>(StatusCodes.Status200OK)
-            .Produces(StatusCodes.Status404NotFound)
-            .Produces(StatusCodes.Status500InternalServerError);
+        
 
         
         privateGroup.MapPost("", CreateArtifact)
@@ -110,37 +97,9 @@ public static class ArtifactEndpoints
         return TypedResults.Ok(artifacts);
     }
 
-    private static async Task<Results<Ok<List<PublicArtifactResponseDto>>, NotFound>> GetPublicArtifactsBySite
-    (
-        int siteId,
-        IArtifactService service,
-        CancellationToken ct
-    )
-    {
-        var artifacts = await service.GetPublicArtifactsBySiteAsync(ct);
-        if (artifacts.Count == 0)
-        {
-            return TypedResults.NotFound();
-        }
+    
 
-        return TypedResults.Ok(artifacts);
-    }
-
-    private static async Task<Results<Ok<List<PrivateArtifactResponseDto>>, NotFound>> GetPrivateArtifactsBySite
-    (
-        int siteId,
-        IArtifactService service,
-        CancellationToken ct
-    )
-    {
-        var artifacts = await service.GetPrivateArtifactsBySiteAsync(ct);
-        if (artifacts.Count == 0)
-        {
-            return TypedResults.NotFound();
-        }
-
-        return TypedResults.Ok(artifacts);
-    }
+    
     
     
     private static async Task<Results<Created<PrivateArtifactResponseDto>, NotFound>> CreateArtifact

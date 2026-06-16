@@ -1,3 +1,4 @@
+using El_Nabaash.API.DTOs.Artifacts.Response;
 using El_Nabaash.API.DTOs.Site.Request;
 using Microsoft.AspNetCore.Http.HttpResults;
 
@@ -27,7 +28,7 @@ public static class SiteEndpoints
             .WithDescription("Return all sites with their public data")
             // .Produces(StatusCodes.Status200OK, typeof(List<PublicSiteResponse>));
         // or 
-            .Produces<List<PublicSiteResponse>>(StatusCodes.Status200OK)
+            // .Produces<List<PublicSiteResponse>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status500InternalServerError);
             
 
@@ -36,7 +37,16 @@ public static class SiteEndpoints
             .WithName(nameof(GetPublicSiteById))
             .WithSummary("Get Site By Id (Public)")
             .WithDescription("Return a site with its public data by given Id")
-            .Produces<PublicSiteResponse>(StatusCodes.Status200OK)
+            // .Produces<PublicSiteResponse>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
+        
+        publicGroup.MapGet("/{siteId:int}/artifacts", GetPublicArtifactsBySite)
+            .WithName(nameof(GetPublicArtifactsBySite))
+            .WithSummary("Get public artifacts by site ID")
+            .WithDescription("Retrieves a list of all public artifacts associated with a specific site ID")
+            // .Produces<List<PublicArtifactResponseDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
         
@@ -54,7 +64,7 @@ public static class SiteEndpoints
             .WithName(nameof(GetAllPrivateSites))
             .WithSummary("Get All Sites (Private)")
             .WithDescription("Return all sites with their private data")
-            .Produces<List<PrivateSiteResponse>>(StatusCodes.Status200OK)
+            // .Produces<List<PrivateSiteResponse>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status500InternalServerError);
         
@@ -62,7 +72,7 @@ public static class SiteEndpoints
             .WithName(nameof(GetPrivateSiteById))
             .WithSummary("Get Site By Id (Private)")
             .WithDescription("Return a site with its private data by given Id")
-            .Produces<PrivateSiteResponse>(StatusCodes.Status200OK)
+            // .Produces<PrivateSiteResponse>(StatusCodes.Status200OK)
             .Produces((StatusCodes.Status403Forbidden))
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)
@@ -98,6 +108,15 @@ public static class SiteEndpoints
             .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status401Unauthorized)
             .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status500InternalServerError);
+        
+        privateGroup.MapGet("/{siteId:int}/artifacts", GetPrivateArtifactsBySite)
+            .WithName(nameof(GetPrivateArtifactsBySite))
+            .WithSummary("Get private artifacts by site ID")
+            .WithDescription(
+                "Retrieves a list of all private artifacts associated with a specific site ID. This endpoint requires authentication and is intended for internal use.")
+            // .Produces<List<PrivateArtifactResponseDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status404NotFound)
             .Produces(StatusCodes.Status500InternalServerError);
         
         return route;
@@ -136,10 +155,10 @@ public static class SiteEndpoints
         return TypedResults.Created($"/api/private/sites/{createdSite.Id}", createdSite);
     }
 
-    private static async Task<IResult> GetPrivateSiteById(int Id, ISiteService siteService, CancellationToken ct)
+    private static async Task<IResult> GetPrivateSiteById(int id, ISiteService siteService, CancellationToken ct)
     {
-        var site = await siteService.GetPrivateSiteByIdAsync(Id, ct);
-        return site == null ? Results.NotFound($"Site with Id {Id} not found") : Results.Ok(site);
+        var site = await siteService.GetPrivateSiteByIdAsync(id, ct);
+        return site == null ? Results.NotFound($"Site with Id {id} not found") : Results.Ok(site);
     }
     
     private static async Task<IResult> GetAllPrivateSites(ISiteService siteService, CancellationToken ct)
@@ -151,10 +170,10 @@ public static class SiteEndpoints
     
     // Handlers Methods for public Sites
     
-    private static async Task<IResult> GetPublicSiteById(int Id, ISiteService siteService, CancellationToken ct)
+    private static async Task<IResult> GetPublicSiteById(int id, ISiteService siteService, CancellationToken ct)
     {
-        var site = await siteService.GetPublicSiteByIdAsync(Id, ct);
-        return site == null ? Results.NotFound($"Site with Id {Id} not found") : Results.Ok(site);
+        var site = await siteService.GetPublicSiteByIdAsync(id, ct);
+        return site == null ? Results.NotFound($"Site with Id {id} not found") : Results.Ok(site);
     }
 
     private static async Task<IResult> GetAllPublicSites(ISiteService siteService, CancellationToken ct)
@@ -163,5 +182,38 @@ public static class SiteEndpoints
         return Results.Ok(await siteService.GetAllPublicSitesAsync(ct));
     }
     
+    
+    private static async Task<Results<Ok<List<PrivateArtifactResponseDto>>, NotFound>> GetPrivateArtifactsBySite
+    (
+        int siteId,
+        IArtifactService service,
+        CancellationToken ct
+    )
+    {
+        var artifacts = await service.GetPrivateArtifactsBySiteAsync(ct);
+        if (artifacts.Count == 0)
+        {
+            return TypedResults.NotFound();
+        }
+
+        return TypedResults.Ok(artifacts);
+    }
+    
+    
+    private static async Task<Results<Ok<List<PublicArtifactResponseDto>>, NotFound>> GetPublicArtifactsBySite
+    (
+        int siteId,
+        IArtifactService service,
+        CancellationToken ct
+    )
+    {
+        var artifacts = await service.GetPublicArtifactsBySiteAsync(ct);
+        if (artifacts.Count == 0)
+        {
+            return TypedResults.NotFound();
+        }
+
+        return TypedResults.Ok(artifacts);
+    }
     
 }
