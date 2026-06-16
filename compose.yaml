@@ -1,0 +1,7 @@
+﻿services:
+  el-nabaash.api:
+    image: el-nabaash.api
+    build:
+      context: .
+      dockerfile: El-Nabaash.API/Dockerfile
+
