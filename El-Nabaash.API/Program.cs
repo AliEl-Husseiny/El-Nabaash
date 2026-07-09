@@ -1,61 +1,27 @@
-using El_Nabaash.API.Endpoints.CatalogRecords;
-
 namespace El_Nabaash.API;
 
 public static class Program
 {
     public static async Task Main(string[] args)
     {
+        #region Dependency Injection Container
+
         var builder = WebApplication.CreateBuilder(args);
 
-        // get connection string
-        var connectionString = DataUtility.GetConnectionString(builder.Configuration);
-
-        // Connect to database
-        builder.Services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(connectionString));
-
-        // Add services to the container.
-        builder.Services.AddAuthorization();
-
-        // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+        builder.Services.AddWebApiServices(builder.Configuration);
         builder.Services.AddOpenApiSwagger();
+        builder.Services.AddInfrastructureServices(builder.Configuration);
+        builder.Services.AddCoreServices(builder.Configuration);
 
+        #endregion
 
-        //add identity endpoints 
-        builder.Services.AddIdentityApiEndpoints<ApplicationUser>(opt =>
-            {
-                opt.SignIn.RequireConfirmedAccount = false;
-                opt.User.RequireUniqueEmail = true;
-            })
-            .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<AppDbContext>();
+        #region Middlewares - Pipeline
 
-        //Admin Policy 
-        builder.Services.AddAuthorizationBuilder()
-            .AddPolicy("AdminOnly", policy => policy.RequireRole("Admin"));
-
-
-        //enable validation for minimal APIs
-        builder.Services.AddValidation();
-
-
-        //add email sender services 
-        builder.Services.AddTransient<IEmailSender, ConsoleEmailService>();
-
-        // register custom service 
-        builder.Services.AddScoped<ISiteService, SiteService>();
-        builder.Services.AddScoped<IArtifactMediaFileService, ArtifactMediaFileService>();
-        builder.Services.AddScoped<IArtifactService, ArtifactService>();
-        builder.Services.AddScoped<ICatalogRecordService, CatalogRecordService>();
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        // if (app.Environment.IsDevelopment())
-        // {
-            app.UseSwagger();
-            app.UseSwaggerUI();
-        // }
+        await app.SeedDatabaseAsync();
+
+        app.UseSwaggerMiddlewares();
 
         app.UseHttpsRedirection();
         app.UseStaticFiles();
@@ -63,23 +29,10 @@ public static class Program
         app.UseAuthorization();
         app.UseBlockIdentityEndpoints();
 
-        var authRouteGroup = app.MapGroup("/api/auth")
-            .WithTags("Admin");
+        app.MapEndpoints();
 
-        authRouteGroup.MapIdentityApi<ApplicationUser>();
-
-
-        using (var scope = app.Services.CreateScope())
-        {
-            await DataSeed.ManageDataAsync(scope.ServiceProvider);
-        }
-
-        app.MapHomeEndpoints();
-        app.MapCustomIdentityEndpoints();
-        app.MapSiteEndpoints();
-        app.MapArtifactMediaFilesEndpoints();
-        app.MapArtifactEndpoints();
-        app.MapCatalogRecordEndpoints();
         await app.RunAsync();
+
+        #endregion
     }
 }
