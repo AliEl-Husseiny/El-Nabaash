@@ -10,7 +10,7 @@ public static class InfrastructureServiceExtensions
 
         // Connect to database
         services.AddDbContext<AppDbContext>(options =>
-            options.UseNpgsql(connectionString));
+            options.UseSqlServer(connectionString));
 
         // add identity endpoints
         services.AddIdentityApiEndpoints<ApplicationUser>(opt =>
