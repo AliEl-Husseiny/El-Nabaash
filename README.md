@@ -137,11 +137,11 @@ erDiagram
 
 ### Prerequisites
 
-| Tool          | Version  | Purpose                    |
-|---------------|----------|----------------------------|
-| .NET SDK      | 10.0+    | Build & run the API        |
-| PostgreSQL    | 14+      | Database                   |
-| Docker        | 24+      | Containerized deployment   |
+| Tool       | Version | Purpose                  |
+| ---------- | ------- | ------------------------ |
+| .NET SDK   | 10.0+   | Build & run the API      |
+| PostgreSQL | 14+     | Database                 |
+| Docker     | 24+     | Containerized deployment |
 
 ### 1. Clone the Repository
 
@@ -172,6 +172,7 @@ dotnet run --project El-Nabaash.API
 ```
 
 The API will:
+
 1. ✅ Apply any pending EF Core migrations
 2. ✅ Seed roles (`Admin`, `Archivist`, `Researcher`, `Viewer`)
 3. ✅ Seed demo users with claims-based permissions
@@ -211,12 +212,12 @@ The API uses **ASP.NET Identity** with **JWT Bearer** authentication.
 
 ### Default Seeded Users
 
-| Role         | Email                   | Password         | Permissions                                             |
-|--------------|-------------------------|------------------|---------------------------------------------------------|
-| Admin        | `admin@aeon.org`        | `Admin123!`      | Full access, verify records, upload media, manage users |
-| Archivist    | `archivist@aeon.org`    | `Archivist123!`  | Verify catalog records                                  |
-| Researcher   | `researcher@aeon.org`   | `Researcher123!` | Upload media                                            |
-| Viewer       | `viewer@aeon.org`       | `Viewer123!`     | Read-only access                                        |
+| Role       | Email                 | Password         | Permissions                                             |
+| ---------- | --------------------- | ---------------- | ------------------------------------------------------- |
+| Admin      | `admin@aeon.org`      | `Admin123!`      | Full access, verify records, upload media, manage users |
+| Archivist  | `archivist@aeon.org`  | `Archivist123!`  | Verify catalog records                                  |
+| Researcher | `researcher@aeon.org` | `Researcher123!` | Upload media                                            |
+| Viewer     | `viewer@aeon.org`     | `Viewer123!`     | Read-only access                                        |
 
 ### Authenticating
 
@@ -231,48 +232,48 @@ The API uses **ASP.NET Identity** with **JWT Bearer** authentication.
 
 ### Sites
 
-| Method | Endpoint          | Description          |
-|--------|-------------------|----------------------|
-| GET    | `/api/sites`      | List all sites       |
-| GET    | `/api/sites/{id}` | Get site by ID       |
-| POST   | `/api/sites`      | Create a new site    |
-| PUT    | `/api/sites/{id}` | Update a site        |
-| DELETE | `/api/sites/{id}` | Delete a site        |
+| Method | Endpoint          | Description       |
+| ------ | ----------------- | ----------------- |
+| GET    | `/api/sites`      | List all sites    |
+| GET    | `/api/sites/{id}` | Get site by ID    |
+| POST   | `/api/sites`      | Create a new site |
+| PUT    | `/api/sites/{id}` | Update a site     |
+| DELETE | `/api/sites/{id}` | Delete a site     |
 
 ### Artifacts
 
-| Method | Endpoint              | Description             |
-|--------|-----------------------|-------------------------|
-| GET    | `/api/artifacts`      | List all artifacts      |
-| GET    | `/api/artifacts/{id}` | Get artifact by ID      |
-| POST   | `/api/artifacts`      | Create a new artifact   |
-| PUT    | `/api/artifacts/{id}` | Update an artifact      |
-| DELETE | `/api/artifacts/{id}` | Delete an artifact      |
+| Method | Endpoint              | Description           |
+| ------ | --------------------- | --------------------- |
+| GET    | `/api/artifacts`      | List all artifacts    |
+| GET    | `/api/artifacts/{id}` | Get artifact by ID    |
+| POST   | `/api/artifacts`      | Create a new artifact |
+| PUT    | `/api/artifacts/{id}` | Update an artifact    |
+| DELETE | `/api/artifacts/{id}` | Delete an artifact    |
 
 ### Artifact Media Files
 
-| Method | Endpoint            | Description                 |
-|--------|---------------------|-----------------------------|
-| GET    | `/api/media`        | List media files            |
-| GET    | `/api/media/{id}`   | Get/download a media file   |
-| POST   | `/api/media`        | Upload a media file         |
-| DELETE | `/api/media/{id}`   | Delete a media file         |
+| Method | Endpoint          | Description               |
+| ------ | ----------------- | ------------------------- |
+| GET    | `/api/media`      | List media files          |
+| GET    | `/api/media/{id}` | Get/download a media file |
+| POST   | `/api/media`      | Upload a media file       |
+| DELETE | `/api/media/{id}` | Delete a media file       |
 
 ### Catalog Records
 
-| Method | Endpoint                | Description                |
-|--------|-------------------------|----------------------------|
-| GET    | `/api/catalog-records`  | List catalog records       |
-| GET    | `/api/catalog-records/{id}` | Get record by ID       |
-| POST   | `/api/catalog-records`  | Submit a new record        |
-| PUT    | `/api/catalog-records/{id}` | Update a record        |
-| DELETE | `/api/catalog-records/{id}` | Delete a record        |
+| Method | Endpoint                    | Description          |
+| ------ | --------------------------- | -------------------- |
+| GET    | `/api/catalog-records`      | List catalog records |
+| GET    | `/api/catalog-records/{id}` | Get record by ID     |
+| POST   | `/api/catalog-records`      | Submit a new record  |
+| PUT    | `/api/catalog-records/{id}` | Update a record      |
+| DELETE | `/api/catalog-records/{id}` | Delete a record      |
 
 ### Authentication
 
-| Method | Endpoint            | Description          |
-|--------|---------------------|----------------------|
-| POST   | `/api/auth/login`   | Login with credentials |
+| Method | Endpoint          | Description            |
+| ------ | ----------------- | ---------------------- |
+| POST   | `/api/auth/login` | Login with credentials |
 
 > **Note:** Registration, password reset, and account management endpoints are blocked by the `BlockIdentityEndpoints` middleware for security purposes.
 
@@ -280,28 +281,28 @@ The API uses **ASP.NET Identity** with **JWT Bearer** authentication.
 
 ## 🛠️ Tech Stack
 
-| Layer              | Technology                                  |
-|--------------------|---------------------------------------------|
-| **Framework**      | ASP.NET Core 10.0 (Minimal APIs)            |
-| **ORM**            | Entity Framework Core 10.0                  |
-| **Database**       | PostgreSQL (via Npgsql)                      |
-| **Auth**           | ASP.NET Identity + JWT Bearer               |
-| **Documentation**  | Swagger / OpenAPI (Swashbuckle)              |
-| **Containerization** | Docker with multi-stage builds            |
+| Layer                | Technology                       |
+| -------------------- | -------------------------------- |
+| **Framework**        | ASP.NET Core 10.0 (Minimal APIs) |
+| **ORM**              | Entity Framework Core 10.0       |
+| **Database**         | PostgreSQL (via Npgsql)          |
+| **Auth**             | ASP.NET Identity + JWT Bearer    |
+| **Documentation**    | Swagger / OpenAPI (Swashbuckle)  |
+| **Containerization** | Docker with multi-stage builds   |
 
 ---
 
 ## 📦 NuGet Packages
 
-| Package                                          | Purpose                           |
-|--------------------------------------------------|-----------------------------------|
-| `Microsoft.AspNetCore.Authentication.JwtBearer`  | JWT authentication                |
-| `Microsoft.AspNetCore.Identity.EntityFrameworkCore` | Identity with EF Core          |
-| `Microsoft.EntityFrameworkCore`                  | ORM framework                     |
-| `Microsoft.EntityFrameworkCore.Design`           | EF Core migrations tooling        |
-| `Microsoft.EntityFrameworkCore.Tools`            | CLI tools for migrations          |
-| `Npgsql.EntityFrameworkCore.PostgreSQL`          | PostgreSQL database provider      |
-| `Swashbuckle.AspNetCore`                         | Swagger/OpenAPI documentation     |
+| Package                                             | Purpose                       |
+| --------------------------------------------------- | ----------------------------- |
+| `Microsoft.AspNetCore.Authentication.JwtBearer`     | JWT authentication            |
+| `Microsoft.AspNetCore.Identity.EntityFrameworkCore` | Identity with EF Core         |
+| `Microsoft.EntityFrameworkCore`                     | ORM framework                 |
+| `Microsoft.EntityFrameworkCore.Design`              | EF Core migrations tooling    |
+| `Microsoft.EntityFrameworkCore.Tools`               | CLI tools for migrations      |
+| `Npgsql.EntityFrameworkCore.PostgreSQL`             | PostgreSQL database provider  |
+| `Swashbuckle.AspNetCore`                            | Swagger/OpenAPI documentation |
 
 ---
 
@@ -337,15 +338,15 @@ public static class Program
 }
 ```
 
-| Extension                        | Responsibility                                      |
-|----------------------------------|-----------------------------------------------------|
-| `AddWebApiServices()`           | Authorization, policies, validation                  |
-| `AddOpenApiSwagger()`           | Swagger/OpenAPI configuration & security definitions |
-| `AddInfrastructureServices()`   | Database, Identity, email sender                     |
-| `AddCoreServices()`             | Application services (Site, Artifact, Catalog)       |
-| `SeedDatabaseAsync()`           | Auto-migrate and seed demo data                      |
-| `UseSwaggerMiddlewares()`       | Swagger UI pipeline                                  |
-| `MapEndpoints()`                | All minimal API endpoint routes                      |
+| Extension                     | Responsibility                                       |
+| ----------------------------- | ---------------------------------------------------- |
+| `AddWebApiServices()`         | Authorization, policies, validation                  |
+| `AddOpenApiSwagger()`         | Swagger/OpenAPI configuration & security definitions |
+| `AddInfrastructureServices()` | Database, Identity, email sender                     |
+| `AddCoreServices()`           | Application services (Site, Artifact, Catalog)       |
+| `SeedDatabaseAsync()`         | Auto-migrate and seed demo data                      |
+| `UseSwaggerMiddlewares()`     | Swagger UI pipeline                                  |
+| `MapEndpoints()`              | All minimal API endpoint routes                      |
 
 ---
 
