@@ -17,3 +17,4 @@ global using El_Nabaash.API.Endpoints.Artifacts;
 global using El_Nabaash.API.Endpoints.CustomIdentityEndpoints;
 global using El_Nabaash.API.Endpoints.Sites;
 global using El_Nabaash.API.Services.Implementation;
+global using El_Nabaash.API.Endpoints.CatalogRecords;

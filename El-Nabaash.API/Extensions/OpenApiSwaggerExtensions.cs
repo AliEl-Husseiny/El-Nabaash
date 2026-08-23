@@ -12,9 +12,9 @@ public static class OpenApiSwaggerExtensions
                 Title = "El-Nabaash API",
                 Version = "1.0.0",
                 Description = """
-                              <img src = "/images/AeonRegistryLogo.png" height="120" />
+                              <img src = "/images/elnabaash.png" height="120" />
 
-                              ## Aeon Research Division
+                              ## El-Nabaash Research Division
 
                               Internal API for managing recovered artifacts and research data. 
                               Provides Secure access for field researchers and analysts.
