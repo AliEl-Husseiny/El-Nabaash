@@ -8,6 +8,11 @@ on:
 jobs:
   build_and_deploy:
     runs-on: windows-latest
+    env:
+      DEPLOY_WEBSITE_NAME: ${{ secrets.WEBSITE_NAME || vars.WEBSITE_NAME }}
+      DEPLOY_SERVER_COMPUTER_NAME: ${{ secrets.SERVER_COMPUTER_NAME || vars.SERVER_COMPUTER_NAME }}
+      DEPLOY_SERVER_USERNAME: ${{ secrets.SERVER_USERNAME || vars.SERVER_USERNAME }}
+      DEPLOY_SERVER_PASSWORD: ${{ secrets.SERVER_PASSWORD }}
     
     steps:
       - name: Checkout code
@@ -34,10 +39,23 @@ jobs:
       - name: Publish
         run: dotnet publish --configuration Release --output ./publish
 
+      - name: Validate deployment configuration
+        shell: pwsh
+        run: |
+          $missing = @()
+          if ([string]::IsNullOrWhiteSpace("${{ env.DEPLOY_WEBSITE_NAME }}")) { $missing += "WEBSITE_NAME (secret or variable)" }
+          if ([string]::IsNullOrWhiteSpace("${{ env.DEPLOY_SERVER_COMPUTER_NAME }}")) { $missing += "SERVER_COMPUTER_NAME (secret or variable)" }
+          if ([string]::IsNullOrWhiteSpace("${{ env.DEPLOY_SERVER_USERNAME }}")) { $missing += "SERVER_USERNAME (secret or variable)" }
+          if ([string]::IsNullOrWhiteSpace("${{ env.DEPLOY_SERVER_PASSWORD }}")) { $missing += "SERVER_PASSWORD (secret)" }
+          if ($missing.Count -gt 0) {
+            Write-Error ("Missing deployment configuration: " + ($missing -join ", "))
+            exit 1
+          }
+
       - name: Deploy to MonsterASP.NET via WebDeploy
         uses: rasmusbuchholdt/simply-web-deploy@2.1.0
         with:
-          website-name: ${{ secrets.WEBSITE_NAME }}
-          server-computer-name: ${{ secrets.SERVER_COMPUTER_NAME }}
-          server-username: ${{ secrets.SERVER_USERNAME }}
-          server-password: ${{ secrets.SERVER_PASSWORD }}
+          website-name: ${{ env.DEPLOY_WEBSITE_NAME }}
+          server-computer-name: ${{ env.DEPLOY_SERVER_COMPUTER_NAME }}
+          server-username: ${{ env.DEPLOY_SERVER_USERNAME }}
+          server-password: ${{ env.DEPLOY_SERVER_PASSWORD }}
